@@ -10,7 +10,7 @@ const GroupMemberSchema= new mongoose.Schema({
         required:true
     },
     inviteEmail:{
-        type:stering,
+        type:String,
         required:true
     },
     role:{
@@ -21,7 +21,7 @@ const GroupMemberSchema= new mongoose.Schema({
     },
     inviteStatus:{
         type:String,
-        enum:['pending','accepted','expiredToken'],
+        enum:['pending','accepted','expired'],
         default:'pending',
         required:true
     },
@@ -36,3 +36,4 @@ const GroupMemberSchema= new mongoose.Schema({
 },
 {timestamps:true}
 )
+export default mongoose.model('GroupMember',GroupMemberSchema)

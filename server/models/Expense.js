@@ -5,7 +5,7 @@ const ExpenseSchema= new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId, ref:'Group',
         required:true,
     },
-    ceaditedBy:{
+    createdBy:{
         type:mongoose.Schema.Types.ObjectId, ref:'User',
         required:true,
     },
@@ -28,7 +28,7 @@ const ExpenseSchema= new mongoose.Schema({
         required:true,
     },
     receiptUrl:{
-        type:[stering],
+        type:[String],
         default:[]
     }
     
