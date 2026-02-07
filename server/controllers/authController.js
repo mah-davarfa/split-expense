@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 
@@ -33,7 +32,7 @@ const logIn = async (req,res,next)=>{
             const  isVerifiedPassword = await  bcrypt.compare(password, hashedPassword)
             if(!isVerifiedPassword)
             return    res.status(403).json({
-                    message:'Access Denied'
+                      message:'Access Denied'
             })
         }catch(err){
             next(err)
@@ -44,6 +43,6 @@ const logIn = async (req,res,next)=>{
         email:user.email,
     }    
     const token = generateToken(payload)
-    res.status(200).json({message:'successfully loged in', token:token})
+    res.status(200).json({message:'successfully loged in', token:token,user: { userId: user._id, name: user.name, email: user.email }})
 }
 export default logIn;

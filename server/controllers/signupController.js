@@ -1,10 +1,9 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 
-const SALT_AROUND= Number(process.env.SALT_AROUND || 10);
-const JWT_SECRET= process.env.JWT_SECRET;
+const SALT_ROUNDS= Number(process.env.SALT_ROUNDS || 10);
+
 
 //helper function
 const httpErrorHandler =(message,status)=>{
@@ -34,7 +33,7 @@ const signup = async(req,res, next)=>{
     if(user)
         return next(httpErrorHandler('email is already exist',409))
 
-    const SALT = await bcrypt.genSalt(SALT_AROUND);
+    const SALT = await bcrypt.genSalt(SALT_ROUNDS);
     const hashedPassword = await bcrypt.hash(password.trim(),SALT);
     
     const newUser =  {
@@ -55,7 +54,7 @@ const signup = async(req,res, next)=>{
      }
     const token= generateToken(payload)
 
-    res.status(201).json({message:"sinup succesfully", token:token})
+    res.status(201).json({message:"sinup succesfully", token:token,user: { userId: user._id, name: user.name, email: user.email }})
 
    }catch(err){
     next(err)

@@ -5,6 +5,8 @@ import rateLimit from 'express-rate-limit';
 import errorHandler from './middlewares/errorHandler.js'
 import signin from "./controllers/authController.js"
 import signup from './controllers/signupController.js'
+import groupsRouter from './routes/groups.routes.js'
+
 
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN
 const app = express();
@@ -23,24 +25,42 @@ app.use(
     limit:100,
     standardHeaders:'draft-7',
     legacyHeaders:false,
-    message:"Too many request from this IP , pleas try again later"
+    message:{error:"Too many request from this IP , pleas try again later"}
  })
 
-// / Landing
+// / test Landing
 app.get('/',(req,res)=>{
     res.json({message:"API is running"})
 })
 // /signup
-app.use('/signin',authLimiter,signin)
+app.post('/signin',authLimiter,signin)
 // /login
-app.use('/signup',authLimiter,signup)
+app.post('/signup',authLimiter,signup)
 
-// /app/groups (groups dashboard)
-// /app/groups/new (create group)
-// /app/groups/:groupId (group detail expenses)
-// /app/groups/:groupId/members (members/invites)
-// /app/groups/:groupId/balances (balance sheet)
-// /app/settings (profile/settings)
+
+app.use('/api/groups',groupsRouter)
+//POST /api/groups/new (create group)
+//GET /api/groups (shows groups and user info Dashbord)
+//PUT /api/groups/:groupId(edit one group at same page if it is admin)
+//DELETE /api/groups/:groupId (DELETE one group if it is admin)
+
+//POST /api/groups/:groupId/members(admin(creator of group)invites with a member with email by using SendGrid, Mailgun, etc. )
+//GET /api/groups/:groupId/members (shows members)
+//DELETE /api/groups/:groupId/members/:memberId (delete one of the member if it is admin)
+//PUT /api/groups/:groupId/members/:memberId (admin can edit the qual share or percentage)
+
+//POST/api/groups/:groupId/expenses (add expense to lists of expense(optional picture of recipt))
+//GET /api/groups/:groupId/expenses (group detail expenses)
+//PUT /api/groups/:goupId/expenses/:expensesId (edit one of it's own expense)
+//DELETE /api/groups/:goupId/expenses/:expensesId (DELETE one of it's own expense)
+
+//GET /api/groups/:groupId/balances (balance sheet)
+
+//GET /api/user/settings (profile/settings)
+//PUT /api/user/settings(editing profile)
+//PUT /api/user/password
+
+//POST /api/invites/accept { token } 
 
 //////orute Not Found////
 app.use((req,res)=>{
