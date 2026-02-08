@@ -39,8 +39,8 @@ app.post('/signup',authLimiter,signup)
 
 
 app.use('/api/groups',groupsRouter)
-//POST /api/groups/new (create group)
-//GET /api/groups (shows groups and user info Dashbord)
+//POST /api/groups (create group)DONE
+//GET /api/groups (shows groups and user info Dashbord)DONE
 //PUT /api/groups/:groupId(edit one group at same page if it is admin)
 //DELETE /api/groups/:groupId (DELETE one group if it is admin)
 

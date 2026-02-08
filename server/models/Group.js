@@ -3,10 +3,12 @@ import mongoose from 'mongoose';
 const GroupSchema= new mongoose.Schema({
     name:{
         type:String,
+        minlength:3,
         required:true
     },
     description:{
         type:String,
+        minlength:5,
         required:true,
     },
      createdBy:{
@@ -21,4 +23,4 @@ const GroupSchema= new mongoose.Schema({
 },
 {timestamps:true}
 )
-export default mongoose.model("Expense",GroupSchema)
+export default mongoose.model("Group",GroupSchema)
