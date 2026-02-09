@@ -102,4 +102,37 @@ export const getGroupsDashboard = async (req,res,next)=>{
     }
 }
 
+//GET /api/groups/:groupId (shows members)
+export const getGroupWithMembers= async(req,res,next)=>{
 
+    try{
+    const userId = req.user.userId;
+        if(!isIdValidMongooseId(userId))
+            return next(httpErrorHandler('the Id is not DB ID',400)) 
+
+    const groupId = req.params.groupId;
+    if(!groupId)
+        return next(httpErrorHandler('The Id for Group is required', 400))
+    
+    if(!isIdValidMongooseId(groupId))
+        return next(httpErrorHandler('teh ID is not DB Id for group', 400))
+
+    const group= await Group.findById(groupId)
+    if(!group)
+        return next(httpErrorHandler('group is not exicte in DataBase',404))
+
+    const isUserInGroup = await GroupMember.findOne({groupId:group._id,userId})
+    if(!isUserInGroup)
+        return next(httpErrorHandler('UnAuthorize: access Denid',403))
+
+    const membersOfGroup= await GroupMember.find({groupId:group._id})
+        .select("userId inviteStatus createdAt role")
+        .populate("userId","name profilePcture")   
+    res.status(200).json({
+        group,
+        membersOfGroup
+    })    
+    }catch(error){
+        return next(error)
+    }
+} 

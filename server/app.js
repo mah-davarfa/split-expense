@@ -39,16 +39,21 @@ app.post('/signup',authLimiter,signup)
 
 
 app.use('/api/groups',groupsRouter)
+
+//////Groups controller//////
 //POST /api/groups (create group)DONE
 //GET /api/groups (shows groups and user info Dashbord)DONE
+//GET /api/groups/:groupId (shows members)
 //PUT /api/groups/:groupId(edit one group at same page if it is admin)
 //DELETE /api/groups/:groupId (DELETE one group if it is admin)
 
-//POST /api/groups/:groupId/members(admin(creator of group)invites with a member with email by using SendGrid, Mailgun, etc. )
-//GET /api/groups/:groupId/members (shows members)
+//////members controller
+//POST /api/groups/:groupId/members(admin(creator of group)invites a member with email by using SendGrid, Mailgun, etc. )
 //DELETE /api/groups/:groupId/members/:memberId (delete one of the member if it is admin)
 //PUT /api/groups/:groupId/members/:memberId (admin can edit the qual share or percentage)
 
+
+//////expenses controler ////////
 //POST/api/groups/:groupId/expenses (add expense to lists of expense(optional picture of recipt))
 //GET /api/groups/:groupId/expenses (group detail expenses)
 //PUT /api/groups/:goupId/expenses/:expensesId (edit one of it's own expense)
@@ -56,10 +61,13 @@ app.use('/api/groups',groupsRouter)
 
 //GET /api/groups/:groupId/balances (balance sheet)
 
+////setting controller//////
 //GET /api/user/settings (profile/settings)
 //PUT /api/user/settings(editing profile)
+//PUT /api/user/settings/profile-picture
 //PUT /api/user/password
 
+////invetation controller///
 //POST /api/invites/accept { token } 
 
 //////orute Not Found////
