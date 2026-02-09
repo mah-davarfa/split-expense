@@ -43,9 +43,9 @@ app.use('/api/groups',groupsRouter)
 //////Groups controller//////
 //POST /api/groups (create group)DONE
 //GET /api/groups (shows groups and user info Dashbord)DONE
-//GET /api/groups/:groupId (shows members)
-//PUT /api/groups/:groupId(edit one group at same page if it is admin)
-//DELETE /api/groups/:groupId (DELETE one group if it is admin)
+//GET /api/groups/:groupId (shows members)DONE
+//PUT /api/groups/:groupId(edit one group at same page if it is admin)DONE
+//DELETE /api/groups/:groupId (inactive one group if it is admin)
 
 //////members controller
 //POST /api/groups/:groupId/members(admin(creator of group)invites a member with email by using SendGrid, Mailgun, etc. )

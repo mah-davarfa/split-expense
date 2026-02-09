@@ -88,7 +88,7 @@ export const getGroupsDashboard = async (req,res,next)=>{
             inviteStatus:'accepted'
         })
         .select("groupId role")
-        .populate('groupId','name description createdAt');
+        .populate('groupId','name description createdBy status createdAt');
       res.status(200).json({
         user:{
             name:dbUser.name,
@@ -121,7 +121,11 @@ export const getGroupWithMembers= async(req,res,next)=>{
     if(!group)
         return next(httpErrorHandler('group is not exicte in DataBase',404))
 
-    const isUserInGroup = await GroupMember.findOne({groupId:group._id,userId})
+    const isUserInGroup = await GroupMember.findOne({
+        groupId:group._id,
+        userId,
+        inviteStatus: 'accepted',
+    })
     if(!isUserInGroup)
         return next(httpErrorHandler('UnAuthorize: access Denid',403))
 
@@ -136,3 +140,112 @@ export const getGroupWithMembers= async(req,res,next)=>{
         return next(error)
     }
 } 
+
+//PUT /api/groups/:groupId(edit one group at same page if it is admin)
+export const updateGroup = async (req,res,next)=>{
+   
+   try{
+    const userId=req.user?.userId
+    if(!userId)
+        return next(httpErrorHandler("Unauthorized", 401))
+
+    if(!isIdValidMongooseId(userId))
+        return next(httpErrorHandler('teh ID is not DB Id for user', 400))
+
+    const groupId = req.params?.groupId;
+    if(!groupId)
+        return next(httpErrorHandler('the Group Id is required',400))
+
+    if(!isIdValidMongooseId(groupId))
+        return next(httpErrorHandler('teh ID is not DB Id for group', 400))
+
+    const isAdminRequesting= await GroupMember.findOne({
+        groupId,
+        userId,
+        role:'admin',
+        inviteStatus: "accepted"
+    })
+    if(!isAdminRequesting)
+        return next(httpErrorHandler('Forbidden: admin only', 403))
+
+    const isGroupExist = await Group.findById(groupId)
+    if(!isGroupExist)
+        return next(httpErrorHandler('Group is not exist to update',404))
+
+    const {name,description,status}= req.body;
+    
+    const updateData={}
+    if(name !== undefined){
+        if(name.trim().length<3)
+            return next(httpErrorHandler('Name must be more than 3 charaters',400))
+     updateData.name = name.trim()   
+    }
+    if(description !== undefined){
+        if(description.trim().length<5)
+            return next(httpErrorHandler('Description must be more than 5 characters',400))
+      updateData.description = description.trim()  
+    }
+    if(status !==undefined){
+        const allowed=['active','inactive']
+        if(!allowed.includes(status))
+            return next(httpErrorHandler('status only can be either active or inactive',400))
+        updateData.status=status;
+    }
+    if(Object.keys(updateData).length === 0)
+        return next(httpErrorHandler("Nothing to update", 400))
+
+    const updatedGroup= await Group
+       .findByIdAndUpdate(groupId, updateData,{new:true ,runValidators:true})
+    res.status(200).json({
+        message:'group updated',
+        updatedGroup
+    })   
+
+   }catch(error){
+    return next(error)
+   }
+}
+
+//DELETE /api/groups/:groupId (inactive one group if it is admin)
+export const inactiveGroup = async (req,res,next)=>{
+    try{
+     const userId=req.user?.userId
+    if(!userId)
+        return next(httpErrorHandler("Unauthorized", 401))
+
+    if(!isIdValidMongooseId(userId))
+        return next(httpErrorHandler('teh ID is not DB Id for user', 400))
+
+    const groupId = req.params?.groupId;
+    if(!groupId)
+        return next(httpErrorHandler('the Group Id is required',400))
+
+    if(!isIdValidMongooseId(groupId))
+        return next(httpErrorHandler('teh ID is not DB Id for group', 400))
+
+    const isAdminRequesting= await GroupMember.findOne({
+        groupId,
+        userId,
+        role:'admin',
+        inviteStatus: "accepted"
+    })
+    if(!isAdminRequesting)
+        return next(httpErrorHandler('Forbidden: admin only', 403))
+
+    const isGroupExist = await Group.findById(groupId)
+    if(!isGroupExist)
+        return next(httpErrorHandler('Group is not exist to update',404))  
+     const newUpdate = {status:'inactive'}
+    const updatedGroup = await Group.findByIdAndUpdate(
+        groupId,
+        newUpdate,
+        {new: true, runValidators : true}
+    )   
+    res.status(200).json({
+        message:"Group is inactive",
+        updatedGroup
+    })  
+    }catch(error){
+        return next(error)
+    }
+}
