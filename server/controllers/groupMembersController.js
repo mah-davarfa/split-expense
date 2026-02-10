@@ -71,7 +71,7 @@ export const inviteUserToGroup = async(req,res,next)=>{
            }
 
 
-/////////////////token must be created and added//////////////////////////////////////////////
+/////////////////invitation token creates
         const inviteExpireAt = new Date(Date.now()+48*60*60*1000)
         const rawToken = crypto.randomBytes(32).toString('hex')
         const hashedToken= crypto.createHash('sha256').update(rawToken).digest('hex')

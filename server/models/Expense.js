@@ -4,10 +4,12 @@ const ExpenseSchema= new mongoose.Schema({
     groupId:{
         type:mongoose.Schema.Types.ObjectId, ref:'Group',
         required:true,
+        index:true,
     },
     createdBy:{
         type:mongoose.Schema.Types.ObjectId, ref:'User',
         required:true,
+        index:true,
     },
     paidBy:{
         type:mongoose.Schema.Types.ObjectId, ref:'User',
@@ -26,6 +28,7 @@ const ExpenseSchema= new mongoose.Schema({
     expenseDate:{
         type:Date,
         required:true,
+        index:true,
     },
     receiptUrl:{
         type:[String],

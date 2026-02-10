@@ -6,6 +6,7 @@ import errorHandler from './middlewares/errorHandler.js'
 import signin from "./controllers/authController.js"
 import signup from './controllers/signupController.js'
 import groupsRouter from './routes/groups.routes.js'
+import inviteRouter from './routes/invites.routes.js'
 
 
 
@@ -42,6 +43,9 @@ app.post('/signup',authLimiter,signup)
 
 
 //////Groups controller//////
+//POST /api/invites/accept { token } 
+app.use('/api/invites', inviteRouter)
+
 //POST /api/groups (create group)DONE
 //GET /api/groups (shows groups and user info Dashbord)DONE
 //GET /api/groups/:groupId (shows members)DONE
@@ -70,7 +74,7 @@ app.use('/api/groups',groupsRouter)
 //PUT /api/user/password
 
 ////invetation controller///
-//POST /api/invites/accept { token } 
+
 
 //////orute Not Found////
 app.use((req,res)=>{
