@@ -19,7 +19,9 @@ const GroupMemberSchema= new mongoose.Schema({
     },
     inviteEmail:{
         type:String,
-        
+        trim:true,
+        lowercase: true,
+        match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Email format is not valid'],
     },
     inviteStatus:{
         type:String,
@@ -31,6 +33,9 @@ const GroupMemberSchema= new mongoose.Schema({
         type:String,
         
     },
+    inviteExpireAt:{
+        type:Date
+    },
      invitedBy:{
         type:mongoose.Schema.Types.ObjectId, ref:'User',
         
@@ -38,4 +43,9 @@ const GroupMemberSchema= new mongoose.Schema({
 },
 {timestamps:true}
 )
+///prevents from creating duplicat when in frontend user clicks 2 times
+GroupMemberSchema.index(
+  { groupId: 1, inviteEmail: 1 },
+  { unique: true }
+);
 export default mongoose.model('GroupMember',GroupMemberSchema)

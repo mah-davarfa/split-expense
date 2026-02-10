@@ -4,12 +4,14 @@ const GroupSchema= new mongoose.Schema({
     name:{
         type:String,
         minlength:3,
-        required:true
+        required:true,
+        trim:true
     },
     description:{
         type:String,
         minlength:5,
         required:true,
+        trim:true
     },
      createdBy:{
         type:mongoose.Schema.Types.ObjectId, ref:'User',
@@ -23,4 +25,5 @@ const GroupSchema= new mongoose.Schema({
 },
 {timestamps:true}
 )
+GroupSchema.index({ createdBy: 1 });
 export default mongoose.model("Group",GroupSchema)

@@ -8,6 +8,7 @@ import signup from './controllers/signupController.js'
 import groupsRouter from './routes/groups.routes.js'
 
 
+
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN
 const app = express();
 app.use(express.json());
@@ -38,20 +39,21 @@ app.post('/signin',authLimiter,signin)
 app.post('/signup',authLimiter,signup)
 
 
-app.use('/api/groups',groupsRouter)
+
 
 //////Groups controller//////
 //POST /api/groups (create group)DONE
 //GET /api/groups (shows groups and user info Dashbord)DONE
 //GET /api/groups/:groupId (shows members)DONE
-//PUT /api/groups/:groupId(edit one group at same page if it is admin)DONE
-//DELETE /api/groups/:groupId (inactive one group if it is admin)
+//PUT /api/groups/:groupId(edit one group if it is admin)DONE
+//DELETE /api/groups/:groupId (inactive one group if it is admin)DONE
+app.use('/api/groups',groupsRouter)
 
-//////members controller
-//POST /api/groups/:groupId/members(admin(creator of group)invites a member with email by using SendGrid, Mailgun, etc. )
-//DELETE /api/groups/:groupId/members/:memberId (delete one of the member if it is admin)
+//////members controller is nested in Group controller////////////
+//POST /api/groups/:groupId/members(admin(creator of group)invites a member with email by using SendGrid, Mailgun, Resend, etc. )DONE
+//DELETE /api/groups/:groupId/members/:memberId (admin can delete one of the member from group)
 //PUT /api/groups/:groupId/members/:memberId (admin can edit the qual share or percentage)
-
+  
 
 //////expenses controler ////////
 //POST/api/groups/:groupId/expenses (add expense to lists of expense(optional picture of recipt))

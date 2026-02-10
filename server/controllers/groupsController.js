@@ -28,8 +28,8 @@ export const creategroup = async(req,res,next)=>{
         if(!name ||!description)
             return next(httpErrorHandler('To create a Group name and description are required',400));
 
-        if(name.length<3  || description.length<5)
-            return next(httpErrorHandler('name must have more than 3 characters and description must be more than 5 characters',400));
+        if(name.length<2  || description.length<5)
+            return next(httpErrorHandler('name must have more than 2 characters and description must be more than 5 characters',400));
         
 
         const userId = req.user.userId;
@@ -87,9 +87,9 @@ export const getGroupsDashboard = async (req,res,next)=>{
             userId,
             inviteStatus:'accepted'
         })
-        .select("groupId role")
-        .populate('groupId','name description createdBy status createdAt');
-      res.status(200).json({
+            .select("groupId role")
+            .populate('groupId','name description createdBy status createdAt');
+        res.status(200).json({
         user:{
             name:dbUser.name,
             email:dbUser.email
@@ -107,7 +107,9 @@ export const getGroupWithMembers= async(req,res,next)=>{
 
     try{
     const userId = req.user.userId;
-        if(!isIdValidMongooseId(userId))
+    if(!req.user || !req.user.userId)
+            return next(httpErrorHandler("Unauthorized: missing token payload", 401))    
+    if(!isIdValidMongooseId(userId))
             return next(httpErrorHandler('the Id is not DB ID',400)) 
 
     const groupId = req.params.groupId;
@@ -141,7 +143,7 @@ export const getGroupWithMembers= async(req,res,next)=>{
     }
 } 
 
-//PUT /api/groups/:groupId(edit one group at same page if it is admin)
+//PUT /api/groups/:groupId(edit one group  if it is admin)
 export const updateGroup = async (req,res,next)=>{
    
    try{
@@ -176,8 +178,8 @@ export const updateGroup = async (req,res,next)=>{
     
     const updateData={}
     if(name !== undefined){
-        if(name.trim().length<3)
-            return next(httpErrorHandler('Name must be more than 3 charaters',400))
+        if(name.trim().length<2)
+            return next(httpErrorHandler('Name must be more than 2 charaters',400))
      updateData.name = name.trim()   
     }
     if(description !== undefined){
