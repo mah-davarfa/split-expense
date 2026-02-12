@@ -22,7 +22,7 @@ router.delete('/:groupId',authToken,inactiveGroup)
 
 
 ///////////nested router from here for members//////////
-
+//api/groups/:groupId/members
 router.use('/:groupId/members', memberRouter)
 
 

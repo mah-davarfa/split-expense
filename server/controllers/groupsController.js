@@ -54,6 +54,7 @@ export const creategroup = async(req,res,next)=>{
             role:'admin',
             inviteStatus:'accepted',
             invitedBy: creatorOfGroup._id,
+            membershipStatus:'active'
         }
         await GroupMember.create(newGroupMember);
         res.status(201).json({
@@ -106,9 +107,10 @@ export const getGroupsDashboard = async (req,res,next)=>{
 export const getGroupWithMembers= async(req,res,next)=>{
 
     try{
-    const userId = req.user.userId;
+    
     if(!req.user || !req.user.userId)
-            return next(httpErrorHandler("Unauthorized: missing token payload", 401))    
+            return next(httpErrorHandler("Unauthorized: missing token payload", 401)) 
+     const userId = req.user.userId;   
     if(!isIdValidMongooseId(userId))
             return next(httpErrorHandler('the Id is not DB ID',400)) 
 
@@ -127,12 +129,13 @@ export const getGroupWithMembers= async(req,res,next)=>{
         groupId:group._id,
         userId,
         inviteStatus: 'accepted',
+        membershipStatus:'active'
     })
     if(!isUserInGroup)
         return next(httpErrorHandler('UnAuthorize: access Denid',403))
 
     const membersOfGroup= await GroupMember.find({groupId:group._id})
-        .select("userId inviteStatus createdAt role")
+        .select("userId inviteStatus createdAt role membershipStatus")
         .populate("userId","name profilePcture")   
     res.status(200).json({
         group,
@@ -165,7 +168,8 @@ export const updateGroup = async (req,res,next)=>{
         groupId,
         userId,
         role:'admin',
-        inviteStatus: "accepted"
+        inviteStatus: "accepted",
+        membershipStatus:'active'
     })
     if(!isAdminRequesting)
         return next(httpErrorHandler('Forbidden: admin only', 403))
@@ -229,7 +233,8 @@ export const inactiveGroup = async (req,res,next)=>{
         groupId,
         userId,
         role:'admin',
-        inviteStatus: "accepted"
+        inviteStatus: "accepted",
+        membershipStatus:'active'
     })
     if(!isAdminRequesting)
         return next(httpErrorHandler('Forbidden: admin only', 403))

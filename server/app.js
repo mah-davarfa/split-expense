@@ -42,7 +42,7 @@ app.post('/signup',authLimiter,signup)
 
 
 
-//////Groups controller//////
+//////mounted paths //////
 //POST /api/invites/accept { token } 
 app.use('/api/invites', inviteRouter)
 
@@ -55,7 +55,7 @@ app.use('/api/groups',groupsRouter)
 
 //////members controller is nested in Group controller////////////
 //POST /api/groups/:groupId/members(admin(creator of group)invites a member with email by using SendGrid, Mailgun, Resend, etc. )DONE
-//DELETE /api/groups/:groupId/members/:memberId (admin can delete one of the member from group)
+//DELETE /api/groups/:groupId/members/:memberId (admin can delete one of the member from group)DONE
 //PUT /api/groups/:groupId/members/:memberId (admin can edit the qual share or percentage)
   
 
@@ -73,7 +73,7 @@ app.use('/api/groups',groupsRouter)
 //PUT /api/user/settings/profile-picture
 //PUT /api/user/password
 
-////invetation controller///
+
 
 
 //////orute Not Found////

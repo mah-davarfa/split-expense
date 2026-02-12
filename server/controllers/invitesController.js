@@ -37,7 +37,10 @@ export  const addInvitedUserToGroupByUsingInviteTokenLink= async (req,res,next)=
           
             const hashTokenFromUrl= crypto.createHash('sha256').update(rawTokenfromUrl).digest('hex');
                  ////////////////Database query///////////////
-            const getInvitedUserByHash = await GroupMember.findOne({inviteToken:hashTokenFromUrl, inviteStatus: 'pending'})
+            const getInvitedUserByHash = await GroupMember.findOne({
+                inviteToken:hashTokenFromUrl, 
+                inviteStatus: 'pending'
+            })
             if(!getInvitedUserByHash)
                     return next(httpErrorHandler('this Token is not valid',400))
                 
@@ -51,12 +54,24 @@ export  const addInvitedUserToGroupByUsingInviteTokenLink= async (req,res,next)=
             if (getInvitedUserByHash.userId) {
                 return next(httpErrorHandler('Invite already associated with a user', 400));
                 }
+            
+            const existingMembership = await GroupMember.findOne({
+            groupId: getInvitedUserByHash.groupId,
+            userId,
+            inviteStatus: 'accepted',
+            membershipStatus: 'active'
+            });
+
+            if (existingMembership) {
+            return next(httpErrorHandler('User is already an active member of this group', 400));
+            }
             //////////updating db/////
             getInvitedUserByHash.userId=userId;
             getInvitedUserByHash.role='member';
             getInvitedUserByHash.inviteStatus='accepted';
             getInvitedUserByHash.inviteExpireAt=undefined;
             getInvitedUserByHash.inviteToken=undefined;
+            getInvitedUserByHash.membershipStatus='active'
             const userAddedtoMembership= await getInvitedUserByHash.save()
                 ///verify added//
             const groupName = await Group.findById(userAddedtoMembership.groupId).select('name')

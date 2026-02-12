@@ -5,12 +5,11 @@ const GroupMemberSchema= new mongoose.Schema({
     groupId:{
         type:mongoose.Schema.Types.ObjectId , ref:'Group',
         required:true,
-        unique:true,
-        index:true,
+        
     },
     userId:{
         type:mongoose.Schema.Types.ObjectId , ref:'User',
-        index:true,
+        
     },
     
     role:{
@@ -24,20 +23,23 @@ const GroupMemberSchema= new mongoose.Schema({
         trim:true,
         lowercase: true,
         match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Email format is not valid'],
-        index:true,
+        
         },
     inviteStatus:{
         type:String,
         enum:['pending','accepted','expired'],
         default:'pending',
-        index:true
+        
     },
     inviteToken:{
         type:String,
-        index:true,
-        unique:true,
-        sparse:true,
         
+ 
+    },
+    membershipStatus:{
+        type:String,
+       enum:['active','inactive'],
+       default:'active'
     },
     inviteExpireAt:{
         type:Date
@@ -49,4 +51,19 @@ const GroupMemberSchema= new mongoose.Schema({
 },
 {timestamps:true}
 )
+GroupMemberSchema.index(
+  { groupId: 1, inviteEmail: 1 },
+  { unique: true, sparse: true }
+);
+
+GroupMemberSchema.index(
+  { groupId: 1, userId: 1 },
+  { unique: true, sparse: true }
+);
+
+GroupMemberSchema.index(
+  { inviteToken: 1 },
+  { unique: true, sparse: true }
+);
+
 export default mongoose.model('GroupMember',GroupMemberSchema)
