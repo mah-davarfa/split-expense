@@ -41,6 +41,9 @@ const GroupMemberSchema= new mongoose.Schema({
        enum:['active','inactive'],
        default:'active'
     },
+    percentage: { type: Number, min: 0, max: 100, default: 0 },
+    share: { type: Number, min: 0, default: 1 },
+
     inviteExpireAt:{
         type:Date
     },

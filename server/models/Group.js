@@ -18,6 +18,12 @@ const GroupSchema= new mongoose.Schema({
         required:true,
         index:true,
     },
+    splitMode: {
+    type: String,
+    enum: ['equal', 'percentage', 'share'],
+    default: 'equal'
+    },
+
      status:{
         type:String,
         enum:['active','inactive'],

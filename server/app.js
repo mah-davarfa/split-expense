@@ -56,8 +56,15 @@ app.use('/api/groups',groupsRouter)
 //////members controller is nested in Group controller////////////
 //POST /api/groups/:groupId/members(admin(creator of group)invites a member with email by using SendGrid, Mailgun, Resend, etc. )DONE
 //DELETE /api/groups/:groupId/members/:memberId (admin can delete one of the member from group)DONE
-//PUT /api/groups/:groupId/members/:memberId (admin can edit the qual share or percentage)
-  
+//api/groups/:groupId/members/split (admin can edit the qual share or percentage)DONE
+//   {
+//   "splitMode": "share",
+//   "members": [
+//     { "userId": "USER1_ID", "share": 1 },
+//     { "userId": "USER2_ID", "share": 3 },
+//     { "userId": "USER3_ID", "share": 2 }
+//   ]
+// }
 
 //////expenses controler ////////
 //POST/api/groups/:groupId/expenses (add expense to lists of expense(optional picture of recipt))
