@@ -21,7 +21,10 @@ export const requireGroupMember = async (req, res, next) => {
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
     if(!isIdValidMongooseId(userId))
         return next(httpErrorHandler('The Id is not DB ID',400))
-
+    if(!groupId)
+      return next(httpErrorHandler('Group id is required',400))
+    if(!isIdValidMongooseId(groupId))
+      return next(httpErrorHandler('The Id is not DB ID',400))
     const membership = await GroupMember.findOne({
       groupId,
       userId,

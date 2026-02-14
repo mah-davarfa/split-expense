@@ -2,7 +2,7 @@ import express from 'express';
 import memberRouter from './groupMembers.routes.js'
 import authToken from '../middlewares/auth.js'
 import {getGroupsDashboard,creategroup,getGroupWithMembers,updateGroup,inactiveGroup} from '../controllers/groupsController.js';
-
+import expenseRouter from './expenses.routes.js'
 const router = express.Router();
 
 //POST /api/groups (create group)
@@ -25,5 +25,7 @@ router.delete('/:groupId',authToken,inactiveGroup)
 //api/groups/:groupId/members
 router.use('/:groupId/members', memberRouter)
 
+///api/groups/:groupId/expenses
+router.use('/:groupId/expenses',expenseRouter)
 
 export default router;

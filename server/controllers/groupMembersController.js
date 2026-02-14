@@ -147,7 +147,6 @@ export const deletUserFromGroup= async(req,res,next)=>{
         const activityCount = await Expense.countDocuments({
             groupId,
             $or:[{createdBy:memberId},{paidBy:memberId}]
-            
         })
        
         if(activityCount>0)
