@@ -19,6 +19,7 @@ const ExpenseSchema= new mongoose.Schema({
         type:String,
         minlength:3,
         required:true,
+        trim:true,
     },
     amount:{
         type:Number,
@@ -33,6 +34,23 @@ const ExpenseSchema= new mongoose.Schema({
     receiptUrl:{
         type:[String],
         default:[]
+    },
+    status: {
+   type: String,
+   enum: ['active', 'voided'],
+   default: 'active'
+    },
+    voidedAt:{
+        type:Date,
+    },
+    voidedReason:{
+        type:String,
+        minlength:3,
+        trim:true,
+    },
+    voidedBy:{
+        type:mongoose.Schema.Types.ObjectId, ref:'User',
+        
     }
     
 },

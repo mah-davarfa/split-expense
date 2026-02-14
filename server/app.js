@@ -68,9 +68,10 @@ app.use('/api/groups',groupsRouter)
 
 //////expenses controler ////////
 //POST/api/groups/:groupId/expenses (add expense to lists of expense(optional picture of recipt))DONE
-//GET /api/groups/:groupId/expenses (group detail expenses)DONE
-//PUT /api/groups/:groupId/expenses/:expensesId (edit one of it's own expense)
-//DELETE /api/groups/:goupId/expenses/:expensesId (DELETE one of it's own expense)
+//GET /api/groups/:groupId/expenses(group detail expenses) DONE
+//GET /api/groups/:groupId/expenses?me=true(user detail expenses)DONE
+//PUT /api/groups/:groupId/expenses/:expensesId (edit one of it's own expense)DONE
+//DELETE /api/groups/:goupId/expenses/:expensesId (DELETE one of it's own expense)DONE
 
 //GET /api/groups/:groupId/balances (balance sheet)
 

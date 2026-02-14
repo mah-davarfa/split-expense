@@ -18,26 +18,6 @@ const isIdValidMongooseId = (id)=>{
     return mongoose.isValidObjectId(id)
 }
 
-const isUserIsAdminOfMemberOfGroup= async(userId,groupId)=>{
-    try{
-          const membership = await GroupMember.findOne({
-          groupId,
-          userId,
-          inviteStatus: "accepted",
-          membershipStatus: "active",
-          role: "admin",
-        });
-      
-            return membership;
-    } catch (error) { 
-        throw error;
-     }
-    }
-
-
-
-
-
 //POST/api/groups/:groupId/expenses (add expense to lists of expense(optional picture of recipt))
 export const addExpense = async(req,res,next)=>{
 
@@ -89,14 +69,28 @@ export const addExpense = async(req,res,next)=>{
 }
 
 //GET /api/groups/:groupId/expenses (group detail expenses)
+//or GET /api/groups/:groupId/expenses?me=true
 export const getExpenses = async(req,res,next)=>{
     try{
+            const filter={}
             const groupId= req.params.groupId;
-    if(!groupId)
-        return next(httpErrorHandler('in order to get expenses groupId is required',400));
-    const expenses = await Expense.find({groupId}).sort({expenseDate:-1,createdAt:-1});
-    res.status(200).json({
-        expenses
+            if(!groupId)
+                return next(httpErrorHandler('in order to get expenses groupId is required',400));
+            if(!isIdValidMongooseId(groupId))
+                return next(httpErrorHandler('group Id is not DB id',400))
+            filter.groupId=groupId;
+
+            if(req?.query?.me === 'true'){
+                const userId = req.user.userId;
+               if(!userId)
+                  return next(httpErrorHandler("Unauthorized", 401));
+               if(!isIdValidMongooseId(userId))
+                   return next(httpErrorHandler('user Id is not DB id',400))        
+               filter.createdBy=userId
+            }
+            const expenses = await Expense.find(filter).sort({expenseDate:-1,createdAt:-1});
+            res.status(200).json({
+                expenses
     })
 
     }catch(error){
@@ -177,6 +171,58 @@ export const editOneExpense = async(req,res,next)=>{
             message:'the expense successfully updated',
             updatedExpenses
         })
+    }catch(error){
+        return next(error)
+    }
+}
+
+//DELETE /api/groups/:goupId/expenses/:expensesId (VOID one of it's own expense)
+export const voideOneexpense=async (req,res,next)=>{
+    
+    try{
+         const userId= req.user?.userId;
+        if(!userId)
+            return next(httpErrorHandler('Unauthorize access',401))
+        if(!isIdValidMongooseId(userId))
+            return next(httpErrorHandler('the Id is NOT DB id',400))
+        
+        const {groupId, expensesId}= req.params;
+    
+        if(!groupId)
+        return next(httpErrorHandler('in order to get expenses groupId is required',400));
+        if(!isIdValidMongooseId(groupId))
+            return next(httpErrorHandler('groupId id is not DB id',400))
+
+        if(!expensesId)
+            return next(httpErrorHandler('the expense id is required',400));
+        if(!isIdValidMongooseId(expensesId))
+            return next(httpErrorHandler('the expense id is not DB id',400));
+
+        
+        const voidedReason= req.body?.voidedReason;
+        if(!voidedReason || voidedReason.length<3)
+            return next(httpErrorHandler('the Reason to void transaction must be 3 chracter or more',400)
+        )
+    
+        const UpdateVoidAExpenses={
+            status:'voided',
+            voidedAt:new Date(Date.now()),
+            voidedReason:voidedReason?.trim(),
+            voidedBy:userId
+        }
+        const updatedVoidedExpense = await Expense.findOneAndUpdate(
+           { _id:expensesId, groupId,createdBy:userId},
+           UpdateVoidAExpenses,
+           {new:true,runValidators:true}
+        )
+        if (!updatedVoidedExpense)
+            return next(httpErrorHandler('the expenses is not found or Not own by you',404))
+        
+        res.status(200).json({
+            message:'void the transaction was succsesful',
+            updatedVoidedExpense
+        })
+
     }catch(error){
         return next(error)
     }
