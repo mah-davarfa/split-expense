@@ -86,7 +86,7 @@ export const getGroupsDashboard = async (req,res,next)=>{
         const memberships= await GroupMember
         .find({
             userId,
-            inviteStatus:'accepted'
+            inviteStatus:'accepted',
         })
             .select("groupId role")
             .populate('groupId','name description createdBy status createdAt');
@@ -132,7 +132,7 @@ export const getGroupWithMembers= async(req,res,next)=>{
         membershipStatus:'active'
     })
     if(!isUserInGroup)
-        return next(httpErrorHandler('UnAuthorize: access Denid',403))
+        return next(httpErrorHandler('UnAuthorize: access Denid may be you left this group before',403))
 
     const membersOfGroup= await GroupMember.find({groupId:group._id})
         .select("userId inviteStatus createdAt role membershipStatus")

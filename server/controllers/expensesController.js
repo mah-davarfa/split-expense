@@ -60,7 +60,7 @@ export const addExpense = async(req,res,next)=>{
             }
             const created = await Expense.create(newExpenses)
             res.status(201).json({
-                message:'new Expense Added ',
+                message:'new Expense Added',
                 created
             })
         }catch(error){
@@ -69,7 +69,7 @@ export const addExpense = async(req,res,next)=>{
 }
 
 //GET /api/groups/:groupId/expenses (group detail expenses)
-//or GET /api/groups/:groupId/expenses?me=true
+//or GET /api/groups/:groupId/expenses?me=true(own detail expenses)
 export const getExpenses = async(req,res,next)=>{
     try{
             const filter={}
@@ -88,7 +88,9 @@ export const getExpenses = async(req,res,next)=>{
                    return next(httpErrorHandler('user Id is not DB id',400))        
                filter.createdBy=userId
             }
-            const expenses = await Expense.find(filter).sort({expenseDate:-1,createdAt:-1});
+            const expenses = await Expense.find(filter)
+            .sort({expenseDate:-1,createdAt:-1})
+            .populate('createdBy','name')
             res.status(200).json({
                 expenses
     })

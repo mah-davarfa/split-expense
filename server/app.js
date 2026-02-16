@@ -73,7 +73,7 @@ app.use('/api/groups',groupsRouter)
 //PUT /api/groups/:groupId/expenses/:expensesId (edit one of it's own expense)DONE
 //DELETE /api/groups/:goupId/expenses/:expensesId (DELETE one of it's own expense)DONE
 
-//GET /api/groups/:groupId/balances (balance sheet)
+//GET /api/groups/:groupId/balances (balance sheet)DONE
 
 ////setting controller//////
 //GET /api/user/settings (profile/settings)
