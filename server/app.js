@@ -7,7 +7,7 @@ import signin from "./controllers/authController.js"
 import signup from './controllers/signupController.js'
 import groupsRouter from './routes/groups.routes.js'
 import inviteRouter from './routes/invites.routes.js'
-
+import aiRouter from './routes/ai.routes.js'
 
 
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN
@@ -29,6 +29,13 @@ app.use(
     legacyHeaders:false,
     message:{error:"Too many request from this IP , pleas try again later"}
  })
+ const aiLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many AI requests. Try again later." },
+});
 
 // / test Landing
 app.get('/',(req,res)=>{
@@ -43,6 +50,8 @@ app.post('/signup',authLimiter,signup)
 
 
 //////mounted paths //////
+//POST /api/ai/assistant
+app.use('/api/ai',aiLimiter,aiRouter)
 //POST /api/invites/accept { token } 
 app.use('/api/invites', inviteRouter)
 
