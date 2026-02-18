@@ -1,4 +1,4 @@
-import { generateAIResponse } from "../config/aiService.js";
+import { generateAIResponse } from "../services/aiService.js";
 
 const httpErrorHandler = (message, status) => {
   const error = new Error(message);

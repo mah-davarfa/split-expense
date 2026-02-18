@@ -17,8 +17,8 @@ const httpErrorHandler =(message,status)=>{
 const signup = async(req,res, next)=>{
     const {name ,email ,password , phone,}= req.body;
 
-    if(!name || !email || !password || !phone)
-      return next(httpErrorHandler('name,email,password,phone are required !', 400));
+    if(!name || !email || !password )
+      return next(httpErrorHandler('name,email,password are required !', 400));
    
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim().toLowerCase()))
       return next(httpErrorHandler('Email format is not valid', 400));
@@ -26,8 +26,6 @@ const signup = async(req,res, next)=>{
     if(!/^[^<>&]+$/.test(name.trim()))
       return next(httpErrorHandler('name  cannot contain <, >, or &',400));
     
-    if(!/^\+?[1-9]\d{7,14}$/.test(phone.trim()))
-        return next(httpErrorHandler("Invalid phone number format",400))
     
     const user = await  User.findOne({email:email.trim().toLowerCase()})
     if(user)
@@ -37,10 +35,9 @@ const signup = async(req,res, next)=>{
     const hashedPassword = await bcrypt.hash(password.trim(),SALT);
     
     const newUser =  {
-        name:name,
-        email:email,
+        name:name.trim(),
+        email: email.trim().toLowerCase(),
         password:hashedPassword,
-        phone:phone
     }
    
    try{

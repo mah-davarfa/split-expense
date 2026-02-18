@@ -135,7 +135,7 @@ export const getGroupWithMembers= async(req,res,next)=>{
         return next(httpErrorHandler('UnAuthorize: access Denid may be you left this group before',403))
 
     const membersOfGroup= await GroupMember.find({groupId:group._id})
-        .select("userId inviteStatus createdAt role membershipStatus")
+        .select("userId inviteEmail inviteStatus inviteExpireAt createdAt role membershipStatus")
         .populate("userId","name profilePcture")   
     res.status(200).json({
         group,

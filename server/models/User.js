@@ -25,13 +25,7 @@ const UserSchema = new mongoose.Schema({
         trim:true,
         
     },
-    phone: {
-        type: String,
-        unique:true,
-        trim: true,
-        sparse: true,
-        match: [/^\+?[1-9]\d{7,14}$/, "Invalid phone number format"]
-    },
+
 },
     {timestamps:true}
 )

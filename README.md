@@ -55,3 +55,41 @@ Authenticated:
 - Database: MongoDB Atlas, Mongoose
 - Auth: JWT + bcrypt
 - UI: Tailwind CSS, React Icons
+
+## BackEnd structure:
+server/
+├── config/
+│   └── database.js
+├── controllers/
+│   ├── aiController.js
+│   ├── authController.js
+│   ├── expensesController.js
+│   ├── groupBalanceController.js
+│   ├── groupMembersController.js
+│   ├── groupsController.js
+│   ├── invitesController.js
+│   └── signupController.js
+├── middlewares/
+│   ├── auth.js
+│   ├── errorHandler.js
+│   └── groupAuth.js
+├── models/
+│   ├── ChatSession.js
+│   ├── Expense.js
+│   ├── Group.js
+│   ├── GroupMember.js
+│   └── User.js
+├── routes/
+│   ├── ai.routes.js
+│   ├── balances.routes.js
+│   ├── expenses.routes.js
+│   ├── groupMembers.routes.js
+│   ├── groups.routes.js
+│   └── invites.routes.js
+├── services/
+│   └── aiService.js
+├── utils/
+│   └── generateToken.js
+├── app.js
+├── server.js
+└── package.json
