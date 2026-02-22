@@ -6,7 +6,7 @@ import generateToken from '../utils/generateToken.js';
 
 const httpErrorHandler =(message,status)=>{
     const err = new Error (
-        message,
+        message
     )
     err.status=status
     return err;

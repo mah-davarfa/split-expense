@@ -1,8 +1,39 @@
+import { useState } from "react";
+import { useAuth } from "../auth/AuthProvider";
 
 const LoginPage = ()=>{
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState('');
+  
+    const {login} = useAuth();
 
+    const handleSubmit = async(e)=>{
+        e.preventDefault();
+        await login(email,password);
+        setPassword('');
+        setEmail('');
+    }
     return(
-        <h2>LoginPage   page</h2>
+        <div>
+        <h2>Login page</h2>
+        <form onSubmit={handleSubmit}>
+            <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
+            />
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+            />
+
+            <button type="submit">Login</button>
+        </form>
+        </div>
+       
     )
 }
 export default LoginPage;

@@ -21,6 +21,7 @@ function App() {
 
   return (
     <>
+    
     <Routes>
       <Route element={<PublicLayout/>}>
           <Route path='/' element={<LandingPage/>}/>

@@ -15,6 +15,7 @@ const httpErrorHandler =(message,status)=>{
 }
 
 const signup = async(req,res, next)=>{
+  try{
     const {name ,email ,password , phone,}= req.body;
 
     if(!name || !email || !password )
@@ -27,8 +28,8 @@ const signup = async(req,res, next)=>{
       return next(httpErrorHandler('name  cannot contain <, >, or &',400));
     
     
-    const user = await  User.findOne({email:email.trim().toLowerCase()})
-    if(user)
+    const cleanUser = await  User.findOne({email:email.trim().toLowerCase()})
+    if(cleanUser)
         return next(httpErrorHandler('email is already exist',409))
 
     const SALT = await bcrypt.genSalt(SALT_ROUNDS);
@@ -40,7 +41,7 @@ const signup = async(req,res, next)=>{
         password:hashedPassword,
     }
    
-   try{
+   
     const user= await User.create(newUser)
 
     

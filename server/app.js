@@ -8,6 +8,7 @@ import signup from './controllers/signupController.js'
 import groupsRouter from './routes/groups.routes.js'
 import inviteRouter from './routes/invites.routes.js'
 import aiRouter from './routes/ai.routes.js'
+import authToken from "./middlewares/auth.js";
 
 
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN
@@ -41,9 +42,13 @@ app.use(
 app.get('/',(req,res)=>{
     res.json({message:"API is running"})
 })
-// /signup
-app.post('/login',authLimiter,signin)
+//GET/auth/me
+app.get('/auth/me',authToken,(req,res)=>{
+    res.status(200).json({user:req.user})
+})
 // /login
+app.post('/login',authLimiter,signin)
+// /signup
 app.post('/signup',authLimiter,signup)
 
 
