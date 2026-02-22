@@ -42,7 +42,7 @@ app.get('/',(req,res)=>{
     res.json({message:"API is running"})
 })
 // /signup
-app.post('/signin',authLimiter,signin)
+app.post('/login',authLimiter,signin)
 // /login
 app.post('/signup',authLimiter,signup)
 
