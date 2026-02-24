@@ -10,8 +10,8 @@ const KebabMenu = ({items=[]})=>{
         const onClickOutSide=(e)=>{
            if(ref.current && !ref.current.contains(e.target))setOpen(false)
         }
-            document.addEventListener('mousedown', onClickOutSide);
-            return()=>document.removeEventListener('mousedown',onClickOutSide)
+            document.addEventListener('pointerdown', onClickOutSide);
+            return()=>document.removeEventListener('pointerdown',onClickOutSide)
 
         },[])
     

@@ -56,6 +56,7 @@ const AuthProvider = ({children})=>{
 
 
     const login = async(email,password)=>{
+        try{
         const data = await authApi('/login',{body:{email,password}});
         const {token,user} = data;
 
@@ -66,9 +67,15 @@ const AuthProvider = ({children})=>{
         setUser(user);
 
         navigate("/app");
+        }catch(err){
+            throw err;
+        }
+
     }
 
     const signup = async(name,email,password)=>{
+
+        try{
         const data = await authApi('/signup',{body:{name,email,password}});
         const {token,user} = data;
 
@@ -79,6 +86,10 @@ const AuthProvider = ({children})=>{
         setUser(user);
 
         navigate("/app");
+        }catch(err){
+            throw err;
+        }
+
     }
 
     const logout = ()=>{
@@ -88,7 +99,8 @@ const AuthProvider = ({children})=>{
         setUser(null);
         navigate('/login')
     }
-  
+    
+    const getToken = () => localStorage.getItem("token");
     return(
         <AuthContext.Provider value={{
             login,
@@ -97,6 +109,7 @@ const AuthProvider = ({children})=>{
             isUserAuthenticated,
             isLoading,
             user,
+            getToken
         }}>
             {children}
         </AuthContext.Provider>

@@ -4,6 +4,8 @@ import KebabMenu from "../components/KebabMenu";
 import {expensesApi} from '../api/expenses.api.js'
 import {useAuth} from '../auth/AuthProvider.jsx'
 import Modal from "../components/Modal.jsx";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import ErrorBanner from "../components/ErrorBanner.jsx";
 
 const GroupExpensesTab = ()=>{
     const [addExpenceNotClicked,setAddExpenceNotClicked]=useState(true);
@@ -31,11 +33,16 @@ const GroupExpensesTab = ()=>{
         });
     const [editSubmitting, setEditSubmitting] = useState(false);
 
+    const [receiptFiles, setReceiptFiles] = useState([]);
+    const [previews, setPreviews] = useState([]);
+
+    const [receiptOpen, setReceiptOpen] = useState(false);
+    const [receiptSrc, setReceiptSrc] = useState("");
 
     const navigate = useNavigate();
     const {groupId} = useParams();
-    const {token} = useAuth()
-
+    const {getToken} = useAuth()
+        const token= getToken();
 
     useEffect(() => {
         if (!token || !groupId) return;
@@ -60,6 +67,20 @@ const GroupExpensesTab = ()=>{
 
                 loadExpenses();
     }, [token, groupId,mode]);
+
+    const onPickReceipts = (e) => {
+    const files = Array.from(e.target.files || []);
+    setReceiptFiles(files);
+
+    // preview urls
+    const urls = files.map((f) => URL.createObjectURL(f));
+    setPreviews(urls);
+    };
+
+    // cleanup preview URLs
+    useEffect(() => {
+    return () => previews.forEach((u) => URL.revokeObjectURL(u));
+    }, [previews]);
 
     const handleEdit = (expense) => {
             setEditTarget(expense);
@@ -161,6 +182,8 @@ const GroupExpensesTab = ()=>{
     const cancelHandler=(e)=>{
         e.preventDefault();
         setAddExpenceNotClicked(true);
+        setReceiptFiles([]);
+        setPreviews([]);
         setAddNewExpence({description:'',amount:'',expenseDate:''})
     }
 
@@ -208,37 +231,57 @@ const GroupExpensesTab = ()=>{
         setAddExpenceNotClicked(true);
 
         try {
-            const res = await expensesApi.create(token, groupId, {
-            description,
-            amount,
-            expenseDate,
-            receiptUrl: [],
-            });
+            let res;
+
+            const hasFiles = receiptFiles.length > 0;
+
+            if (hasFiles) {
+                res = await expensesApi.createWithReceipts(token, groupId, {
+                description,
+                amount,
+                expenseDate,
+                files: receiptFiles,
+                });
+            } else {
+                res = await expensesApi.create(token, groupId, {
+                description,
+                amount,
+                expenseDate,
+                receiptUrl: [],
+                });
+            }
 
             const created = res.created;
 
             setExpenses((prev) => [created, ...prev]);
 
-            // reset form
-            setAddNewExpence({
-            description: "",
-            amount: "",
-            expenseDate: "",
-            });
+            // reset form + receipts
+            setAddNewExpence({ description: "", amount: "", expenseDate: "" });
+            setReceiptFiles([]);
+            setPreviews([]);
 
-        } catch (err) {
+            } catch (err) {
             alert(err.message || "Server error. Expense not created.");
-        }
-    };
+            }
+            };
 
 
-    const addHandler =()=>{
-        setAddExpenceNotClicked(false)
-    }
+            const addHandler =()=>{
+                setAddExpenceNotClicked(false)
+            }
 
-    const goToBalancesHandler=()=>{
-        navigate('../balances')
-    }
+            const goToBalancesHandler=()=>{
+                navigate('../balances')
+            }
+
+    /////URL builder helper///
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3011";
+
+        const buildFileUrl = (path) => {
+        if (!path) return "";
+        if (path.startsWith("http")) return path;
+        return `${API_BASE_URL}${path}`;
+        };
 
     return(
         <div>
@@ -252,19 +295,17 @@ const GroupExpensesTab = ()=>{
                 )}
             </div>
             <div>
-                {loading && <p>Loading...</p>}
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {loading && <LoadingSpinner />}
+                {error && <ErrorBanner message={error} onClose={() => setError("")}/>}
+
+                {!loading && !error && expenses.length === 0 && (
+                <p>No expenses yet.</p>
+                )}
 
                 {!loading && expenses.map((exp) => (
                 <div
                     key={exp._id}
-                    style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    borderBottom: "1px solid #eee",
-                    padding: "8px 0",
-                    }}
+                    style={{ flex:1}}
                 >
                 <span
                     style={{
@@ -279,6 +320,34 @@ const GroupExpensesTab = ()=>{
                         <strong style={{ marginLeft: "8px", color: "red" }}>(VOIDED)</strong>
                     )}
                 </span>
+                {Array.isArray(exp.receiptUrl) && exp.receiptUrl.length > 0 && (
+                <div style={{ marginTop: 6, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {exp.receiptUrl.map((p) => {
+                    const fullUrl = buildFileUrl(p);
+
+                    return (
+                        <img
+                        key={p}
+                        src={fullUrl}
+                        alt="receipt"
+                        style={{
+                            width: 54,
+                            height: 54,
+                            objectFit: "cover",
+                            borderRadius: 6,
+                            cursor: "pointer",
+                            border: "1px solid #ddd",
+                            opacity: exp.status === "voided" ? 0.6 : 1,
+                        }}
+                        onClick={() => {
+                            setReceiptSrc(fullUrl);
+                            setReceiptOpen(true);
+                        }}
+                        />
+                    );
+                    })}
+                </div>
+                )}
                { mode=== 'mine'&& (
                  <KebabMenu
                     items={[
@@ -332,8 +401,20 @@ const GroupExpensesTab = ()=>{
                         value={addNewExpence.expenseDate}
                         onChange={(e) => setAddNewExpence({ ...addNewExpence, expenseDate: e.target.value })}
                         />
+                       <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={onPickReceipts}
+                        />
 
+                        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                        {previews.map((src) => (
+                            <img key={src} src={src} alt="receipt preview" style={{ width: 80, height: 80, objectFit: "cover" }} />
+                        ))}
+                        </div>
                     </div>
+
                     <div>
                         <button type="submit">Add</button>
                         <button onClick={cancelHandler}>Cancel</button>
@@ -341,6 +422,26 @@ const GroupExpensesTab = ()=>{
                 </form>
                 )}
             </div>
+            {receiptOpen && (
+            <Modal
+                title="Receipt"
+                onClose={() => {
+                setReceiptOpen(false);
+                setReceiptSrc("");
+                }}
+            >
+                <img
+                src={receiptSrc}
+                alt="receipt full"
+                style={{
+                    width: "100%",
+                    maxHeight: "70vh",
+                    objectFit: "contain",
+                    borderRadius: 8,
+                }}
+                />
+            </Modal>
+            )}
          {voidOpen && (
             <Modal
                 title="Void Expense"

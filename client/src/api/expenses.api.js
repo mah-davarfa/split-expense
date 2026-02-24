@@ -51,7 +51,24 @@ updateExpense:(token, groupId, expensesId, updates)=>{
       token,
       body: { voidedReason },
     })
-}
+},
+
+createWithReceipts: (token, groupId, { description, amount, expenseDate, files = [] }) => {
+  const form = new FormData();
+  form.append("description", description);
+  form.append("amount", String(amount));
+  form.append("expenseDate", expenseDate);
+
+  // field name MUST match multer: array("receipts")
+  for (const file of files) form.append("receipts", file);
+
+  return http(`/api/groups/${groupId}/expenses`, {
+    method: "POST",
+    token,
+    body: form, // FormData (http.js already handles it)
+  });
+},
+
 };
 
 
