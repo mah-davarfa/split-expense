@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import crypto from 'crypto';
 import Expense from '../models/Expense.js';
 import User from '../models/User.js';
+import { sendInviteEmail } from "../config/emailService.js";
 ///Helper function
 
 const httpErrorHandler = (message,status)=>{
@@ -100,17 +101,47 @@ export const inviteUserToGroup = async(req,res,next)=>{
         }
 
       
-       const inviteLink = `/invite?token=${rawToken}`
+       
        // after setup Resend  send email whit the inviteLink in here ////////////////////////////////////////////////////////////////////////////
-        const displayName = name?.trim() || inviteEmail;
-        const inviteMessage = `${displayName} invited to join: ${groupInfo.name}`;
+       // IMPORTANT: invite link must be a FULL URL for email
+        const publicUrl = process.env.APP_PUBLIC_URL || "http://localhost:5173";
+        const inviteUrl = `${publicUrl}/invite?token=${rawToken}`;
+            const displayName = name?.trim() || inviteEmail;
 
+            console.log("Resend key suffix:", (process.env.RESEND_API_KEY || "").slice(-6));
+            console.log("EMAIL_FROM:", process.env.EMAIL_FROM);
 
-        res.status(201).json({
-            message:`the invetition for ${displayName}  sent to ${email} and ${displayName}  added to pending status till ${displayName}  accepet it by login or sign up `,
-            inviteMessage,
-            inviteLink
-            })
+          let emailSent = false;
+          let emailError = null;
+        // send email
+        try {
+        await sendInviteEmail({
+            to: inviteEmail,
+            groupName: groupInfo.name,
+            inviteUrl,
+            invitedByName: req.user?.name, 
+        });
+        emailSent = true;
+        } catch (e) {
+        // don’t fail the whole invite if email provider has an outage
+        // invite is already stored in DB as pending, so user can still use link
+        emailError = e?.message || String(e);
+        console.error("Invite email failed:", emailError);
+        }
+        return res.status(201).json({
+            message: `Invitation sent to ${inviteEmail} (if email is valid)`,
+            inviteUrl,
+            emailSent,
+            emailError,
+            invite: {
+                id:savedInvite._id,
+                inviteEmail:savedInvite.inviteEmail,
+                inviteStatus:savedInvite.inviteStatus,
+                inviteExpireAt:savedInvite.inviteExpireAt,
+            },
+            
+        })
+
 
     }catch(error){
         return next(error)
@@ -187,7 +218,7 @@ export const deletUserFromGroup= async(req,res,next)=>{
 //     { "userId": "USER3_ID", "share": 2 }
 //   ]
 // }
-//PUT /api/groups/:groupId/split (admin can edit the qual share or percentage in bulk mode)
+//PUT /api/groups/:groupId/members/split (admin can edit the qual share or percentage in bulk mode)
 export const updateGroupSplitBulk = async(req,res,next)=>{
 
     try{

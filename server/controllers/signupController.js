@@ -16,7 +16,7 @@ const httpErrorHandler =(message,status)=>{
 
 const signup = async(req,res, next)=>{
   try{
-    const {name ,email ,password , phone,}= req.body;
+    const {name ,email ,password }= req.body;
 
     if(!name || !email || !password )
       return next(httpErrorHandler('name,email,password are required !', 400));

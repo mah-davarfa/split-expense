@@ -8,7 +8,7 @@ import SignupPage from './pages/SignupPage.jsx'
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import AppLayout from './layouts/AppLayout.jsx' 
 import GroupsDashboardPage from './pages/GroupsDashboardPage.jsx'
-import CreateGroupPage from './pages/CreateGroupPage.jsx'
+import InviteAcceptPage from './pages/InviteAcceptPage.jsx'
 
 import GroupPage from'./pages/GroupPage.jsx'
 import GroupMembersTab from './pages/GroupMembersTab.jsx'
@@ -27,13 +27,14 @@ function App() {
           <Route path='/' element={<LandingPage/>}/>
           <Route path='/signup' element={<SignupPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
+          <Route path='/invite' element={<InviteAcceptPage/>}/>
       </Route>
 
       <Route element={<ProtectedRoute/>}>
           <Route element={<AppLayout />}>
               <Route path="/app" element={<Navigate to="/app/groups" replace />} />
               <Route path='/app/groups' element={<GroupsDashboardPage/>}/>
-              <Route path='/app/groups/new' element={<CreateGroupPage/>}/>
+             
                
                 {/*nested routes*/}
               <Route path='/app/groups/:groupId' element={<GroupPage/>}>

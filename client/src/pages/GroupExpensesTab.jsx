@@ -378,7 +378,7 @@ const GroupExpensesTab = ()=>{
             
             <div>
              {addExpenceNotClicked?(
-                <p onClick={addHandler}>Add Expence</p>
+                <button onClick={addHandler}>Add Expence</button>
                 ):(
                 
                 <form onSubmit={addExpenceHandler}>

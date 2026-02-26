@@ -45,8 +45,16 @@ export const addExpense = async(req,res,next)=>{
             if(Number.isNaN(newExpenseDate.getTime()))
                 return next(httpErrorHandler('Date format is wrong',400))
 
-            let recieptUrl = [];
-            if(req.body?.receiptUrl){recieptUrl=  Array.isArray(req.body?.receiptUrl) ? req.body.receiptUrl :[req.body.receiptUrl]  }
+           // Build receiptUrl[] from uploaded files (multipart)
+            let receiptUrl = [];
+
+            if (req.files && req.files.length > 0) {
+            // example: /uploads/receipts/receipt_...
+            receiptUrl = req.files.map((f) => `/uploads/receipts/${f.filename}`);
+            } else if (req.body?.receiptUrl) {
+            // fallback: JSON mode with URLs
+            receiptUrl = Array.isArray(req.body.receiptUrl) ? req.body.receiptUrl : [req.body.receiptUrl];
+            }
 
 
             const newExpenses={
@@ -56,7 +64,7 @@ export const addExpense = async(req,res,next)=>{
                 description,
                 amount,
                 expenseDate:newExpenseDate,
-                receiptUrl:recieptUrl
+                receiptUrl:receiptUrl
             }
             const created = await Expense.create(newExpenses)
             res.status(201).json({
@@ -153,10 +161,12 @@ export const editOneExpense = async(req,res,next)=>{
             updateExpense.expenseDate=expenseDate;
         }
 
-        if(req.body?.receiptUrl !== undefined){
-            const receiptUrl= Array.isArray(req.body.receiptUrl)? req.body.receiptUrl: [req.body.receiptUrl]
-            updateExpense.receiptUrl=receiptUrl;
+        if (req.body?.receiptUrl !== undefined) {
+        const raw = Array.isArray(req.body.receiptUrl) ? req.body.receiptUrl : [req.body.receiptUrl];
+        const cleaned = raw.map((x) => String(x).trim()).filter(Boolean);
+        updateExpense.receiptUrl = cleaned;
         }
+                
 
         if(Object.keys(updateExpense).length === 0 )
             return next(httpErrorHandler('Nothing To Update',400))

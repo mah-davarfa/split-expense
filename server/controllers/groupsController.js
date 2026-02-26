@@ -25,14 +25,13 @@ export const creategroup = async(req,res,next)=>{
             return next(httpErrorHandler("Unauthorized: missing token payload", 401));
 
         const {name,description}=req.body;
-        if(!name ||!description)
+        if(!name ||!description )
             return next(httpErrorHandler('To create a Group name and description are required',400));
 
         if(name.length<2  || description.length<5)
             return next(httpErrorHandler('name must have more than 2 characters and description must be more than 5 characters',400));
         
-
-        const userId = req.user.userId;
+       const userId = req.user.userId;
         if(!isIdValidMongooseId(userId))
             return next(httpErrorHandler('The Id is not DB ID',400))
        
@@ -136,7 +135,7 @@ export const getGroupWithMembers= async(req,res,next)=>{
 
     const membersOfGroup= await GroupMember.find({groupId:group._id})
         .select("userId inviteEmail inviteStatus inviteExpireAt createdAt role membershipStatus")
-        .populate("userId","name profilePcture")   
+        .populate("userId","name profilePicture")   
     res.status(200).json({
         group,
         membersOfGroup

@@ -14,6 +14,15 @@ const AuthProvider = ({children})=>{
     useEffect(()=>{
         checkAuth();
     },[])
+
+    const afterAuthRedirect = () => {
+        const pendingInvite= sessionStorage.getItem('inviteToken')
+        if(pendingInvite){
+             navigate("/invite");
+        }else{
+            navigate("/app");
+        }
+    }
        
     const checkAuth = async () => {
         const token = localStorage.getItem("token");
@@ -42,12 +51,14 @@ const AuthProvider = ({children})=>{
             setUser(data.user);
             setIsUserAuthenticated(true);
             localStorage.setItem("user", JSON.stringify(data.user));
+
         } catch (err) {
             // request failed => treat as logged out
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             setUser(null);
             setIsUserAuthenticated(false);
+            
         } finally {
         setIsLoading(false);
         }
@@ -65,8 +76,8 @@ const AuthProvider = ({children})=>{
 
         setIsUserAuthenticated(true);
         setUser(user);
+        afterAuthRedirect()
 
-        navigate("/app");
         }catch(err){
             throw err;
         }
@@ -84,8 +95,8 @@ const AuthProvider = ({children})=>{
 
         setIsUserAuthenticated(true);
         setUser(user);
+        afterAuthRedirect()
 
-        navigate("/app");
         }catch(err){
             throw err;
         }

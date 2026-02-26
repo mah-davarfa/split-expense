@@ -9,20 +9,24 @@ import groupsRouter from './routes/groups.routes.js'
 import inviteRouter from './routes/invites.routes.js'
 import aiRouter from './routes/ai.routes.js'
 import authToken from "./middlewares/auth.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import "dotenv/config";
 
-
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
 const app = express();
 app.use(express.json());
-app.use(helmet());
+
 app.use(
     cors({
     origin:FRONTEND_ORIGIN,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], 
     allowedHeaders: ["Content-Type", "Authorization"]
     })
 )
+app.options(/.*/, cors());
+app.use(helmet());
  const authLimiter=rateLimit({
     windowMs:12*60*60*1000,//12 hours window
     limit:100,
@@ -37,6 +41,19 @@ app.use(
   legacyHeaders: false,
   message: { error: "Too many AI requests. Try again later." },
 });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve uploaded receipts
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"), {
+    setHeaders: (res) => {
+      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    },
+  })
+);
 
 // / test Landing
 app.get('/',(req,res)=>{

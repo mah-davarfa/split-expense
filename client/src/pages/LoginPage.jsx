@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorBanner from "../components/ErrorBanner";
+import { Link } from "react-router-dom";
 
 const LoginPage = ()=>{
     const [email,setEmail] = useState('');
@@ -60,6 +61,9 @@ const LoginPage = ()=>{
 
         {submitting && <LoadingSpinner label="Logging you in..." />}
       </form>
+      <p style={{ marginTop: 10 }}>
+        Don’t have an account? <Link to="/signup">Sign up</Link>
+      </p>
     </div>
   );
 };

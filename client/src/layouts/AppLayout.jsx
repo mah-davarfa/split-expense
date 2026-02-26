@@ -1,4 +1,5 @@
 import {Outlet , Link,useNavigate} from 'react-router-dom'
+import {AIAssistant }from '../components/AIAssistant.jsx'
 
 const AppLayout = ()=>{
 
@@ -19,6 +20,7 @@ const AppLayout = ()=>{
                 </nav>
             </header>
             <Outlet/>
+            <AIAssistant/>
         </div>
     )
 }

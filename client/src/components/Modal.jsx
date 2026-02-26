@@ -16,7 +16,7 @@ const panelStyle = {
   maxWidth: "520px",
   background: "#fff",
   borderRadius: "12px",
-  boxShadow: "0 10px 40px rgba(0,0,0,0.25)",
+  boxShadow: "0 10px 40px rgba(0,0,0,0.75)",
   overflow: "hidden",
 };
 
@@ -39,7 +39,7 @@ export default function Modal({ title = "Modal", onClose, children }) {
         };
         document.addEventListener("keydown", onKeyDown);
 
-        // optional UX: prevent background scroll while modal is open
+        //  UX: prevent background scroll while modal is open
         const prevOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
 
@@ -51,24 +51,24 @@ export default function Modal({ title = "Modal", onClose, children }) {
 
     return (
         <div
-        style={overlayStyle}
-        onMouseDown={(e) => {
-            // close when clicking the overlay (outside the panel)
-            if (e.target === e.currentTarget) onClose?.();
-        }}
-        role="dialog"
-        aria-modal="true"
-        >
-        <div style={panelStyle}>
-            <div style={headerStyle}>
-            <h3 style={{ margin: 0, fontSize: "18px" }}>{title}</h3>
-            <button type="button" onClick={onClose} aria-label="Close">
-                ✕
-            </button>
-            </div>
+          style={overlayStyle}
+          onMouseDown={(e) => {
+              // close when clicking the overlay (outside the panel)
+              if (e.target === e.currentTarget) onClose?.();
+          }}
+          role="dialog"
+          aria-modal="true"
+          >
+          <div style={panelStyle}>
+              <div style={headerStyle}>
+              <h3 style={{ margin: 0, fontSize: "18px" }}>{title}</h3>
+              <button type="button" onClick={onClose} aria-label="Close">
+                  ✕
+              </button>
+              </div>
 
-            <div style={bodyStyle}>{children}</div>
-        </div>
+              <div style={bodyStyle}>{children}</div>
+          </div>
         </div>
     );
 }

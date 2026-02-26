@@ -2,10 +2,12 @@ import express from 'express'
 import {requireGroupMember} from '../middlewares/groupAuth.js'
 import authToken from '../middlewares/auth.js';
 import {addExpense,editOneExpense,getExpenses,voideOneexpense} from '../controllers/expensesController.js'
+import { uploadReceipts } from "../middlewares/uploadReceipt.js";
+
 const router = express.Router({mergeParams:true});
 
 //POST/api/groups/:groupId/expenses
-router.post('/',authToken,requireGroupMember,addExpense)
+router.post('/',authToken,requireGroupMember,uploadReceipts,addExpense)
 
 //GET /api/groups/:groupId/expenses (group detail expenses)
 //GET /api/groups/:groupId/expenses?me=true(my detail expenses)

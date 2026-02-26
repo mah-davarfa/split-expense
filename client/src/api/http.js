@@ -31,15 +31,18 @@ export async function http(path , {method='GET', body ,token, headers={}}={}){
             }else if(contentType.includes('application/pdf')){ data = await res.blob().catch(()=>null)
                 }else{data= await res.text().catch(()=>null)}
 
-     if(!res.ok){
-        const message =
-        (typeof data === "object" && data && (data.error || data.message))||
-        (typeof data ==="string" && data) || `Request failed (${res.status})`
-     
-     const error = new Error(message);
-        error.status= res.status;
-        error.data=data;
-        throw error
-        }
- return data
-}
+     if (!res.ok) {
+    const message =
+        // common shapes
+        (data?.error?.message) ||
+        (data?.message) ||
+        (typeof data === "string" ? data : null) ||
+        `Request failed (${res.status})`;
+
+    const error = new Error(message);
+    error.status = res.status;
+    error.data = data;
+    throw error;
+    }
+    return data
+    }

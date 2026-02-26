@@ -1,4 +1,5 @@
 const errorHandler =(err,req,res,next)=>{
+    console.error("🔥 ERROR:", err);
     if(res.headersSent) return next(err)
 
         let message= err?.message || 'internal error'

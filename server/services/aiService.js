@@ -11,13 +11,19 @@ export const generateAIResponse = async (userId , userMessage)=>{
     //find or create chat session 
     let session = await ChatSession.findOne({userId});
     if(!session) session = await ChatSession.create({userId })
-
+      
      const historyOfConversation= session.messages.slice(-MAX_MESSAGES);
+     const cleanupHistoryOfConversation= historyOfConversation.map((m)=>(
+        {
+        role:m.role,
+        content:m.content
+     }
+    ))
 
     /////call OpenAI using system + history + new user message
     const response = await openai.responses.create({
         model:"gpt-4o-mini",
-        input:[SYSTEM_MESSAGE, ...historyOfConversation,{role:'user',content:userMessage}],
+        input:[SYSTEM_MESSAGE, ...cleanupHistoryOfConversation,{role:'user',content:userMessage}],
         temperature: 0.7,
         max_output_tokens: 250
     });

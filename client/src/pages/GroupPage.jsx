@@ -15,8 +15,7 @@ const GroupPage = ()=>{
 
     return(
         <div>
-            <h3>GroupPage for :</h3>
-            <p>Group description: </p>
+
             <div>
                 <NavLink to="" end style={tabStyle}>
                     Members
