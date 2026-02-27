@@ -112,7 +112,7 @@ export const getGroupBalence = async(req,res,next)=>{
                 if(rounded<0) debtors.push({...b , amount: Math.abs(rounded)});
             }
 
-            const settlment = [];
+            const settelment = [];
             let c=0;//index creditor
             let d=0; //index debtor
 
@@ -122,7 +122,7 @@ export const getGroupBalence = async(req,res,next)=>{
 
                 const pay= Math.min(creditor.amount , debtor.amount)
 
-                settlment.push({
+                settelment.push({
                     fromUserId: debtor.userId,
                     fromName: debtor.name,
                     toUserId: creditor.userId,
@@ -176,7 +176,7 @@ export const getGroupBalence = async(req,res,next)=>{
                 splitMode:group.splitMode,
                 message:'if the balance is "-" meanes you paid less than others',
                 balances:Object.values(balances),
-                settlment,
+                settelment,
                 totalEachUserIdPaid,
                 totalGroupPaid,
             })

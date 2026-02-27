@@ -368,12 +368,11 @@ const GroupExpensesTab = ()=>{
                 </div>
                 ))}
             </div>
-            <h4>Total for Each Member of Group Paid so far</h4>
+            
             <div>
-                <p>NAME   |  Total amount</p>
-                {/*map for total paid by each member  */}
+             
 
-                <button onClick={goToBalancesHandler}>click here to see who owes who</button>
+                <button onClick={goToBalancesHandler}>See Balances</button>
             </div>
             
             <div>
