@@ -90,20 +90,24 @@ console.log('totalEachUserPaidNumber :',totalEachUserPaidNumber)
 // ]
 
     return(
-        <div>
+        <div className="stack">
             <h3>Group Balances</h3>
             {loading && <LoadingSpinner label='Loading Balances ...'/>}
             {error && <ErrorBanner message={error} onClose={()=>setError('')}/>}
             {!loading && !error &&! data &&<p>NO Balances </p> }
             {!loading && !error && data && (
             <>
-                <p style={{marginTop:0}}>
+                <div className="card">
+                    <p style={{ marginTop: 0 }}>
                     Split Mode: <strong>{data.splitMode}</strong>
-                </p>
+                    </p>
 
-                <h4 style={{ marginTop: 16 }}>The Total Group spent: {`$${totalGroupPaidNumber}`}</h4>
-                <div style={{ marginTop: 16 }}>
-                   <h4 > Each Member Spent </h4>
+                    <p style={{ marginBottom: 0 }}>
+                    <strong>The Total Group spent:</strong> {money(totalGroupPaidNumber)}
+                    </p>
+                </div>
+                <div className="card" >
+                   <h4  style={{ marginTop: 16 }}> Each Member Spent </h4>
                 {totalEachUserPaidNumber.map((p,idx)=>(
                     <p key={idx}>{`${p.name} paid so far: $${p.total}` }</p>
                 ))}

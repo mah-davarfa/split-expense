@@ -189,7 +189,7 @@ export const GroupMembersTab = ()=>{
           {members.length === 0 ? (
             <p>No members found.</p>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div className="stack">
               {members.map((m) => {
                 const key = m?._id || m?.userId?._id || m?.inviteEmail || Math.random();
 
@@ -205,15 +205,7 @@ export const GroupMembersTab = ()=>{
                 return (
                   <div
                     key={key}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      border: "1px solid #e5e5e5",
-                      borderRadius: 10,
-                      padding: "10px 12px",
-                      gap: 10,
-                    }}
+                    className="card row-between"
                   >
                     <div style={{ display: "flex", gap: 10, flex: 1 }}>
                       <SimpleAvatar name={name} profilePicture={photo} />
@@ -223,12 +215,12 @@ export const GroupMembersTab = ()=>{
                           {name} {isMe ? "(me)" : ""}
                         </strong>
 
-                        <div style={{ fontSize: 12, opacity: 0.8, marginTop: 4 }}>
+                        <div className="muted" style={{ marginTop: 4 }}>
                           Role: {role} | Invite: {inviteStatus} | This Group Status: {membershipStatus}
                         </div>
 
                         {m?.inviteEmail && (
-                          <div style={{ fontSize: 12, opacity: 0.75, marginTop: 2 }}>
+                          <div className="muted" style={{ marginTop: 2 }}>
                             Email: {m.inviteEmail}
                           </div>
                         )}

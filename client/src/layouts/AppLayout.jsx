@@ -11,15 +11,21 @@ const AppLayout = ()=>{
             navigate('/login');
         }
     return(
-        <div>
-            <header>
-                <Link to='/app/groups'>FairShare</Link>
-                <nav>
+        <div className="app-shell">
+            <header className="app-header">
+                <div className="app-header-inner">
+                    <Link to='/app/groups'>Group Dashboard</Link>
+                <nav className="header-nav">
                     <Link to='/app/profile'>Profile</Link>
                     <button onClick={logout}>Logout</button>
                 </nav>
+                </div>
+
             </header>
-            <Outlet/>
+            <main className="container">
+                 <Outlet/>
+            </main>
+           
             <AIAssistant/>
         </div>
     )

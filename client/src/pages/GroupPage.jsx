@@ -16,20 +16,29 @@ const GroupPage = ()=>{
     return(
         <div>
 
-            <div>
-                <NavLink to="" end style={tabStyle}>
+            <div className="tabs">
+                <NavLink to="" end className={({ isActive }) =>
+                    isActive ? "tab tab-active" : "tab"
+                }>
                     Members
                 </NavLink>  
-                <NavLink to='expenses' style={tabStyle}>
+                <NavLink to='expenses' className={({ isActive }) =>
+                        isActive ? "tab tab-active" : "tab"
+                    }
+                >
                     Expenses
                 </NavLink>
-                <NavLink to='balances' style={tabStyle}>
+                <NavLink to='balances' 
+                className={({ isActive }) =>
+                    isActive ? "tab tab-active" : "tab"
+                }
+                >
                     Balances
                 </NavLink>
             </div>
-            <div>
+            
              <Outlet/>
-            </div>
+           
 
         </div>
         

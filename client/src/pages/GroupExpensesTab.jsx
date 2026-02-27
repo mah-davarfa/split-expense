@@ -284,22 +284,22 @@ const GroupExpensesTab = ()=>{
         };
 
     return(
-        <div>
+        <div className="stack">
             <h3>GroupExpensesTab   page</h3>
 
-            <div>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 {mode === "all" ? (
                     <button onClick={() => setMode("mine")}>My Spending</button>
                 ) : (
                     <button onClick={() => setMode("all")}>See everybody Spending</button>
                 )}
             </div>
-            <div>
+            <div className="stack">
                 {loading && <LoadingSpinner />}
                 {error && <ErrorBanner message={error} onClose={() => setError("")}/>}
 
                 {!loading && !error && expenses.length === 0 && (
-                <p>No expenses yet.</p>
+                <p>No Expenses yet.</p>
                 )}
 
                 {!loading && expenses.map((exp) => (
