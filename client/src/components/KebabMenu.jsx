@@ -34,7 +34,7 @@ const KebabMenu = ({items=[]})=>{
             right: 0,
             top: "100%",
             background: "white",
-            border: "1px solid #ddd",
+            border: "1px solid #dddddd00",
             padding: "6px",
             minWidth: "140px",
             zIndex: 50,

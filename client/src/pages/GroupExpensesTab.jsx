@@ -283,144 +283,235 @@ const GroupExpensesTab = ()=>{
         return `${API_BASE_URL}${path}`;
         };
 
-    return(
-        <div className="stack">
-            <h3>GroupExpensesTab   page</h3>
+return (
+  <div className="stack">
+    <h3>Group Expenses</h3>
 
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                {mode === "all" ? (
-                    <button onClick={() => setMode("mine")}>My Spending</button>
-                ) : (
-                    <button onClick={() => setMode("all")}>See everybody Spending</button>
-                )}
-            </div>
-            <div className="stack">
-                {loading && <LoadingSpinner />}
-                {error && <ErrorBanner message={error} onClose={() => setError("")}/>}
+    {/* Toggle */}
+    <div>
+      {mode === "all" ? (
+        <button onClick={() => setMode("mine")}>My Spending</button>
+      ) : (
+        <button onClick={() => setMode("all")}>
+          See Everybody Spending
+        </button>
+      )}
+    </div>
 
-                {!loading && !error && expenses.length === 0 && (
-                <p>No Expenses yet.</p>
-                )}
+    {/* Expenses List */}
+    <div className="stack">
+      {loading && <LoadingSpinner />}
+      {error && (
+        <ErrorBanner message={error} onClose={() => setError("")} />
+      )}
 
-                {!loading && expenses.map((exp) => (
+      {!loading && !error && expenses.length === 0 && (
+        <p className="muted">No expenses yet.</p>
+      )}
+
+      {!loading &&
+        expenses.map((exp) => (
+          <div key={exp._id} className="card stack">
+            {/* Header row */}
+            <div className="row-between">
+              <div style={{ flex: 1 }}>
                 <div
-                    key={exp._id}
-                    style={{ flex:1}}
+                  style={{
+                    textDecoration:
+                      exp.status === "voided"
+                        ? "line-through"
+                        : "none",
+                    color:
+                      exp.status === "voided"
+                        ? "var(--muted)"
+                        : "inherit",
+                  }}
                 >
-                <span
-                    style={{
-                        textDecoration: exp.status === "voided" ? "line-through" : "none",
-                        color: exp.status === "voided" ? "gray" : "inherit",
-                    }}
-                    >
-                    {new Date(exp.expenseDate).toLocaleDateString()} |{" "}
-                    {exp.createdBy?.name || "Unknown"} |{" "}
-                    {exp.description} | ${Number(exp.amount).toFixed(2)}
-                    {exp.status === "voided" && (
-                        <strong style={{ marginLeft: "8px", color: "red" }}>(VOIDED)</strong>
-                    )}
-                </span>
-                {Array.isArray(exp.receiptUrl) && exp.receiptUrl.length > 0 && (
-                <div style={{ marginTop: 6, display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    {exp.receiptUrl.map((p) => {
-                    const fullUrl = buildFileUrl(p);
+                  {new Date(exp.expenseDate).toLocaleDateString()} |{" "}
+                  {exp.createdBy?.name || "Unknown"} |{" "}
+                  {exp.description} | $
+                  {Number(exp.amount).toFixed(2)}
+                  {exp.status === "voided" && (
+                    <strong style={{ marginLeft: 8, color: "red" }}>
+                      (VOIDED)
+                    </strong>
+                  )}
+                </div>
+              </div>
 
+              {mode === "mine" && (
+                <div>
+                  <KebabMenu
+                    items={[
+                      {
+                        label: "Edit",
+                        onClick: () => handleEdit(exp),
+                        disabled: exp.status === "voided",
+                      },
+                      {
+                        label: "Void",
+                        onClick: () => handleVoid(exp),
+                        disabled: exp.status === "voided",
+                      },
+                    ]}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Receipts */}
+            {Array.isArray(exp.receiptUrl) &&
+              exp.receiptUrl.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {exp.receiptUrl.map((p) => {
+                    const fullUrl = buildFileUrl(p);
                     return (
-                        <img
+                      <img
                         key={p}
                         src={fullUrl}
                         alt="receipt"
                         style={{
-                            width: 54,
-                            height: 54,
-                            objectFit: "cover",
-                            borderRadius: 6,
-                            cursor: "pointer",
-                            border: "1px solid #ddd",
-                            opacity: exp.status === "voided" ? 0.6 : 1,
+                          width: 60,
+                          height: 60,
+                          objectFit: "cover",
+                          borderRadius: 8,
+                          cursor: "pointer",
+                          border: "1px solid var(--border)",
+                          opacity:
+                            exp.status === "voided" ? 0.6 : 1,
                         }}
                         onClick={() => {
-                            setReceiptSrc(fullUrl);
-                            setReceiptOpen(true);
+                          setReceiptSrc(fullUrl);
+                          setReceiptOpen(true);
                         }}
-                        />
+                      />
                     );
-                    })}
+                  })}
                 </div>
-                )}
-               { mode=== 'mine'&& (
-                 <KebabMenu
-                    items={[
-                        {
-                        label: "Edit",
-                        onClick: () => handleEdit(exp),
-                        disabled: exp.status === "voided",
-                        },
-                        {
-                        label: "Void",
-                        onClick: () => handleVoid(exp),
-                        disabled: exp.status === "voided",
-                        },
-                    ]}
-                 />
-               )}
+              )}
+          </div>
+        ))}
+    </div>
 
-                </div>
-                ))}
+    {/* Navigation */}
+    <div>
+      <button onClick={goToBalancesHandler}>
+        See Balances
+      </button>
+    </div>
+
+    {/* Add Expense */}
+    <div>
+      {addExpenceNotClicked ? (
+        <button
+          className="btn-primary"
+          onClick={addHandler}
+        >
+          Add Expense
+        </button>
+      ) : (
+        <form
+          onSubmit={addExpenceHandler}
+          className="card stack"
+        >
+          <input
+            name="description"
+            value={addNewExpence.description}
+            placeholder="Enter description"
+            onChange={(e) =>
+              setAddNewExpence({
+                ...addNewExpence,
+                description: e.target.value,
+              })
+            }
+          />
+
+          <input
+            name="amount"
+            value={addNewExpence.amount}
+            placeholder="Enter amount"
+            onChange={(e) =>
+              setAddNewExpence({
+                ...addNewExpence,
+                amount: e.target.value,
+              })
+            }
+          />
+
+          <input
+            type="date"
+            name="expenseDate"
+            value={addNewExpence.expenseDate}
+            onChange={(e) =>
+              setAddNewExpence({
+                ...addNewExpence,
+                expenseDate: e.target.value,
+              })
+            }
+          />
+
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={onPickReceipts}
+          />
+
+          {previews.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                flexWrap: "wrap",
+              }}
+            >
+              {previews.map((src) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt="preview"
+                  style={{
+                    width: 80,
+                    height: 80,
+                    objectFit: "cover",
+                    borderRadius: 8,
+                  }}
+                />
+              ))}
             </div>
-            
-            <div>
-             
+          )}
 
-                <button onClick={goToBalancesHandler}>See Balances</button>
-            </div>
-            
-            <div>
-             {addExpenceNotClicked?(
-                <button onClick={addHandler}>Add Expence</button>
-                ):(
-                
-                <form onSubmit={addExpenceHandler}>
-                    <div>
-                        <input
-                          name="description"
-                          value={addNewExpence.description}
-                          placeholder="Enter description"
-                          onChange={(e)=>setAddNewExpence({...addNewExpence,description:e.target.value})}
-                        />
-                        <input
-                          name="amount"
-                          value={addNewExpence.amount}
-                          placeholder="Enter damount"
-                          onChange={(e)=>setAddNewExpence({...addNewExpence,amount:e.target.value})}
-                        />
-                        <input
-                        type="date"
-                        name="expenseDate"
-                        value={addNewExpence.expenseDate}
-                        onChange={(e) => setAddNewExpence({ ...addNewExpence, expenseDate: e.target.value })}
-                        />
-                       <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={onPickReceipts}
-                        />
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              justifyContent: "flex-end",
+            }}
+          >
+            <button
+              type="button"
+              onClick={cancelHandler}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn-primary"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
 
-                        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                        {previews.map((src) => (
-                            <img key={src} src={src} alt="receipt preview" style={{ width: 80, height: 80, objectFit: "cover" }} />
-                        ))}
-                        </div>
-                    </div>
-
-                    <div>
-                        <button type="submit">Add</button>
-                        <button onClick={cancelHandler}>Cancel</button>
-                    </div>
-                </form>
-                )}
-            </div>
+    {/* Receipt Modal / Void / Edit Modals remain unchanged below */}
             {receiptOpen && (
             <Modal
                 title="Receipt"

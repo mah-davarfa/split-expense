@@ -1,23 +1,7 @@
 import multer from "multer";
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// ensure folder exists: server/uploads/receipts
-const receiptsDir = path.join(__dirname, "..", "uploads", "receipts");
-fs.mkdirSync(receiptsDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, receiptsDir),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname || "").toLowerCase() || ".jpg";
-    const safeExt = [".jpg", ".jpeg", ".png", ".webp"].includes(ext) ? ext : ".jpg";
-    cb(null, `receipt_${Date.now()}_${Math.round(Math.random() * 1e9)}${safeExt}`);
-  },
-});
+const storage = multer.memoryStorage();
+//multer puts files in RAM: req.files = [{ buffer, mimetype, originalname, ... }, ...]
 
 function fileFilter(req, file, cb) {
   const ok = ["image/jpeg", "image/png", "image/webp"].includes(file.mimetype);

@@ -9,8 +9,6 @@ import groupsRouter from './routes/groups.routes.js'
 import inviteRouter from './routes/invites.routes.js'
 import aiRouter from './routes/ai.routes.js'
 import authToken from "./middlewares/auth.js";
-import path from "path";
-import { fileURLToPath } from "url";
 import "dotenv/config";
 
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
@@ -42,18 +40,10 @@ app.use(helmet());
   message: { error: "Too many AI requests. Try again later." },
 });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-// Serve uploaded receipts
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "uploads"), {
-    setHeaders: (res) => {
-      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-    },
-  })
-);
+
+
+
 
 // / test Landing
 app.get('/',(req,res)=>{

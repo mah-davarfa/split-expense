@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 import Expense from '../models/Expense.js';
 import GroupMember from '../models/GroupMember.js';
 import User from '../models/User.js';
-
+import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier";
 ///Helper function
 
 const httpErrorHandler = (message,status)=>{
@@ -17,6 +18,17 @@ const httpErrorHandler = (message,status)=>{
 const isIdValidMongooseId = (id)=>{
     return mongoose.isValidObjectId(id)
 }
+
+const uploadBufferToCloudinary=(buffer, options={})=>
+    new Promise((resolve,reject)=>{
+        const uploadStream = cloudinary.uploader.upload_stream(
+            {folder:'split-expense/receipts',...options},(error,result)=>{
+                if(error)return reject(error);
+                resolve(result);
+            }
+        )
+        streamifier.createReadStream(buffer).pipe(uploadStream)
+    })
 
 //POST/api/groups/:groupId/expenses (add expense to lists of expense(optional picture of recipt))
 export const addExpense = async(req,res,next)=>{
@@ -45,15 +57,19 @@ export const addExpense = async(req,res,next)=>{
             if(Number.isNaN(newExpenseDate.getTime()))
                 return next(httpErrorHandler('Date format is wrong',400))
 
-           // Build receiptUrl[] from uploaded files (multipart)
+           
             let receiptUrl = [];
 
             if (req.files && req.files.length > 0) {
-            // example: /uploads/receipts/receipt_...
-            receiptUrl = req.files.map((f) => `/uploads/receipts/${f.filename}`);
+            const uploaded = await Promise.all(
+                req.files.map((file) => uploadBufferToCloudinary(file.buffer))
+            );
+
+            receiptUrl = uploaded.map((r) => r.secure_url).filter(Boolean);
             } else if (req.body?.receiptUrl) {
-            // fallback: JSON mode with URLs
-            receiptUrl = Array.isArray(req.body.receiptUrl) ? req.body.receiptUrl : [req.body.receiptUrl];
+            receiptUrl = Array.isArray(req.body.receiptUrl)
+                ? req.body.receiptUrl
+                : [req.body.receiptUrl];
             }
 
 
