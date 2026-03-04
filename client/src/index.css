@@ -158,3 +158,294 @@ input {
 input:focus {
   border-color: #bfdbfe;
 }
+/* =========================
+   Landing Page (Marketing)
+   ========================= */
+
+.landing-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+
+  /* dark green background like screenshot */
+  background: radial-gradient(1200px 700px at 50% 10%, #0b3b2a 0%, #062217 55%, #04160f 100%);
+}
+
+.landing-card {
+  width: min(420px, 100%);
+  border-radius: 26px;
+
+  /* Make it taller on ALL screens */
+  min-height: 75vh;
+
+  padding: 40px 24px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(8, 55, 39, 0.92),
+    rgba(5, 35, 24, 0.92)
+  );
+
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  text-align: center;
+  color: #eafff5;
+
+  /* This is the important part */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+
+.landing-icon {
+  position: relative;
+  width: 140px;
+  height: 170px;  /* was too short before */
+  margin: 0 auto 1px;
+}
+
+.landing-icon .dot {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+
+  background: rgba(46, 235, 154, 0.14);
+  border: 1px solid rgba(46, 235, 154, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.72);
+}
+
+.landing-icon .dot-top {
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.landing-icon .dot-left {
+  bottom: 20px;
+  left: 0;
+}
+
+.landing-icon .dot-right {
+  bottom: 20px;
+  right: 0;
+}
+
+.landing-icon .dot-center {
+  width: 60px;
+  height: 60px;
+  left: 50%;
+  top: 85px;
+  transform: translate(-50%, -50%);
+
+
+  background: rgba(46, 235, 154, 0.28);
+  border: 1px solid rgba(46, 235, 154, 0.24);
+
+  display: grid;
+  place-items: center;
+}
+
+.landing-icon .fork {
+  font-size: 20px;
+  filter: saturate(1.1);
+}
+
+.landing-title {
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 850;
+}
+
+.landing-subtitle {
+  margin: 0 auto 10px;
+  max-width: 320px;
+  font-size: 14px;
+  color: rgba(234, 255, 245, 0.72);
+  line-height: 1.6;
+}
+
+.landing-actions {
+  display: grid;
+  gap: 16px;  /* more breathing space */
+}
+
+.landing-btn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.landing-btn-primary {
+  background: #1eea8a;
+  color: #052316;
+  border-color: rgba(30, 234, 138, 0.55);
+}
+
+.landing-btn-primary:hover {
+  filter: brightness(0.97);
+}
+
+.landing-btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(234, 255, 245, 0.92);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.landing-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.11);
+}
+/* =========================
+   Auth Pages (Login/Signup)
+   Same background/card vibe as landing
+   ========================= */
+
+.auth-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+
+  background: radial-gradient(
+    1200px 700px at 50% 10%,
+    #0b3b2a 0%,
+    #062217 55%,
+    #04160f 100%
+  );
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  border-radius: 26px;
+
+  min-height: 68vh;
+  padding: 26px 24px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(8, 55, 39, 0.92),
+    rgba(5, 35, 24, 0.92)
+  );
+
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  color: #eafff5;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  padding-top: 22px;
+}
+
+.auth-head {
+  display: grid;
+  place-items: center;
+  /* margin-bottom: 4px; */
+}
+
+.auth-badge {
+  width: 62px;
+  height: 62px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(46, 235, 154, 0.22);
+  border: 1px solid rgba(46, 235, 154, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.72);
+
+  color: rgba(234, 255, 245, 0.92);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.auth-form {
+  display: grid;
+  gap: 16px;
+}
+
+.auth-label {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(234, 255, 245, 0.78);
+}
+
+.auth-input {
+  width: 100%;
+  border-radius: 12px;
+  padding: 12px 14px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(234, 255, 245, 0.92);
+  outline: none;
+}
+
+.auth-input::placeholder {
+  color: rgba(234, 255, 245, 0.45);
+}
+
+.auth-input:focus {
+  border-color: rgba(30, 234, 138, 0.55);
+  box-shadow: 0 0 0 3px rgba(30, 234, 138, 0.18);
+}
+
+.auth-foot {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(234, 255, 245, 0.72);
+}
+
+.auth-link {
+  color: #1eea8a;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+/* Header inside auth card */
+.auth-header {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 10px;
+
+  padding: 0px 12px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.auth-navlink {
+  color: rgba(234, 255, 245, 0.85);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.auth-navlink:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.auth-navlink:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(30, 234, 138, 0.18);
+}
+.login-submit {
+  margin-top: 50px;
+}

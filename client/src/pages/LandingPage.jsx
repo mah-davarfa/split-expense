@@ -1,13 +1,43 @@
 import { useNavigate } from "react-router-dom";
+
 const LandingPage = () => {
   const navigate = useNavigate();
+
   return (
-    <div>
-      <h2>LandingPage</h2>
-      <h3>Split Bill Not FriendShips</h3>
-      <button onClick={() => navigate("/login")}>Login</button>
-      <button onClick={() => navigate("/signup")}>Signup</button>
+    <div className="landing-page">
+      <div className="landing-card">
+        <div className="landing-icon" aria-hidden="true">
+          <span className="dot dot-top" />
+          <span className="dot dot-left" />
+          <span className="dot dot-right" />
+          <span className="dot dot-center">
+            <span className="fork">$</span>
+          </span>
+        </div>
+
+        <h1 className="landing-title">Split bills, not friendships</h1>
+        <p className="landing-subtitle">
+          The easiest way to track shared costs with friends, roommates, and travel groups, and Family Members.
+        </p>
+
+        <div className="landing-actions">
+          <button
+            className="landing-btn landing-btn-primary"
+            onClick={() => navigate("/signup")}
+          >
+            Get Started
+          </button>
+
+          <button
+            className="landing-btn landing-btn-secondary"
+            onClick={() => navigate("/login")}
+          >
+            Log In
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
+
 export default LandingPage;
