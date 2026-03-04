@@ -97,11 +97,35 @@ console.log('totalEachUserPaidNumber :',totalEachUserPaidNumber)
             {!loading && !error &&! data &&<p>NO Balances </p> }
             {!loading && !error && data && (
             <>
-                <div className="card">
-                    <p style={{ marginTop: 0 }}>
-                    Split Mode: <strong>{data.splitMode}</strong>
-                    </p>
+             <div className="card">
+                <h4 style={{ marginTop: 0 }}>Split details</h4>
 
+                {data.splitMode === "equal" ? (
+                    <p className="muted" style={{ margin: 0 }}>
+                    Equal split (everyone shares expenses equally).
+                    </p>
+                ) : (
+                    <div className="stack" style={{ gap: 6 }}>
+                    {(data.splitDetails || []).map((m) => (
+                        <div key={m.userId} className="row-between">
+                        <div>{m.name}</div>
+                        <div style={{ fontWeight: 600 }}>
+                            {data.splitMode === "percentage"
+                            ? `${m.percentage}%`
+                            : `${m.share} share`}
+                        </div>
+                        </div>
+                    ))}
+
+                    {data.splitMode === "percentage" && (
+                        <p className="muted" style={{ marginTop: 8 }}>
+                        Total must equal 100%.
+                        </p>
+                    )}
+                    </div>
+                )}
+              </div>
+                <div className="card">
                     <p style={{ marginBottom: 0 }}>
                     <strong>The Total Group spent:</strong> {money(totalGroupPaidNumber)}
                     </p>

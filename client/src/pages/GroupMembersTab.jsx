@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams ,useOutletContext } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider.jsx";
 import { groupsApi } from "../api/groups.api.js";
 import { membersApi } from "../api/members.api.js";
@@ -12,6 +12,7 @@ import { SimpleAvatar } from "../components/SimpleAvatar.jsx";
 
 export const GroupMembersTab = () => {
   const { groupId } = useParams();
+  const { bumpGroupVersion } = useOutletContext();
   const { user, getToken } = useAuth();
   const token = getToken();
   const myId = user?._id || user?.userId;
@@ -191,6 +192,7 @@ export const GroupMembersTab = () => {
 
       // reload DB state, then EXIT edit mode so inputs disappear
       await loadGroup();
+      bumpGroupVersion?.();
       setSplitEditing(false);
     } catch (err) {
       setError(err.message || "Failed to update split.");
@@ -310,17 +312,9 @@ export const GroupMembersTab = () => {
         <LoadingSpinner label="Loading members..." />
       ) : (
         <>
-          <div style={{ marginBottom: 12 }}>
-            <p style={{ margin: 0 }}>
-              <strong>Group:</strong> {group?.name || "—"}
-            </p>
-            {!!group?.description && (
-              <p style={{ margin: 0, opacity: 0.85 }}>{group.description}</p>
-            )}
-          </div>
 
-          {/* ===== Split Settings (Admin only) ===== */}
-          {isAdmin && (
+
+          
             <div
               style={{
                 border: "1px solid #e5e5e5",
@@ -343,8 +337,9 @@ export const GroupMembersTab = () => {
                     Current mode: <strong>{savedSplitMode}</strong>
                   </div>
                 </div>
-
-                {!splitEditing ? (
+      {/* ===== Split Settings (Admin only) ===== */}
+          {isAdmin && (
+                !splitEditing ? (
                   <button onClick={startEditSplit} disabled={!canEditSplit}>
                     Edit split
                   </button>
@@ -360,6 +355,7 @@ export const GroupMembersTab = () => {
                       {splitSaving ? "Saving..." : "Save"}
                     </button>
                   </div>
+                )
                 )}
               </div>
 
@@ -469,6 +465,7 @@ export const GroupMembersTab = () => {
                               type="number"
                               min="0"
                               step="1"
+                              max='100'
                               value={val}
                               onChange={(e) =>
                                 setSplitValues((p) => ({
@@ -490,7 +487,7 @@ export const GroupMembersTab = () => {
                 </div>
               )}
             </div>
-          )}
+          
 
           {isAdmin && (
             <div style={{ marginBottom: 14 }}>

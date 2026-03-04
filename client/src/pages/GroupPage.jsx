@@ -1,47 +1,98 @@
+import { NavLink, Outlet, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "../auth/AuthProvider.jsx";
+import { groupsApi } from "../api/groups.api.js";
 
-import { NavLink,Outlet } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import ErrorBanner from "../components/ErrorBanner.jsx";
 
+const GroupPage = () => {
+  const { groupId } = useParams();
+  const { getToken } = useAuth();
+  const token = getToken();
 
-const GroupPage = ()=>{
-    
-  
+  const [group, setGroup] = useState(null);
+  const [loadingGroup, setLoadingGroup] = useState(true);
+  const [groupError, setGroupError] = useState("");
 
-    const tabStyle = ({ isActive }) => ({
-        padding: "8px 10px",
-        borderRadius: 8,
-        textDecoration: "none",
-        background: isActive ? "#ddd" : "transparent",
-  });
+    const [groupVersion, setGroupVersion] = useState(0);
+  const bumpGroupVersion = () => setGroupVersion((v) => v + 1);
 
-    return(
-        <div>
+  useEffect(() => {
+    if (!token || !groupId) return;
 
-            <div className="tabs">
-                <NavLink to="" end className={({ isActive }) =>
-                    isActive ? "tab tab-active" : "tab"
-                }>
-                    Members
-                </NavLink>  
-                <NavLink to='expenses' className={({ isActive }) =>
-                        isActive ? "tab tab-active" : "tab"
-                    }
-                >
-                    Expenses
-                </NavLink>
-                <NavLink to='balances' 
-                className={({ isActive }) =>
-                    isActive ? "tab tab-active" : "tab"
-                }
-                >
-                    Balances
-                </NavLink>
-            </div>
-            
-             <Outlet/>
-           
+    const loadGroup = async () => {
+      try {
+        setLoadingGroup(true);
+        setGroupError("");
 
-        </div>
         
-    )
-}
+        // backend returns: { group, membersOfGroup }
+        const data = await groupsApi.getGroupWithMembers(token, groupId);
+
+        setGroup(data?.group || null);
+      } catch (err) {
+        setGroupError(err.message || "Failed to load group");
+      } finally {
+        setLoadingGroup(false);
+      }
+    };
+
+    loadGroup();
+  }, [token, groupId, groupVersion]);
+
+  return (
+    <div className="stack">
+      {/* Group header */}
+      <div className="card">
+        {loadingGroup ? (
+          <LoadingSpinner label="Loading group..." />
+        ) : groupError ? (
+          <ErrorBanner message={groupError} onClose={() => setGroupError("")} />
+        ) : (
+          <div className="stack" style={{ gap: 6 }}>
+            <h2 style={{ margin: 0 }}>Group: {group?.name || "Group"}</h2>
+            {!!group?.description && (
+              <p className="muted" style={{ margin: 0 }}>
+                Group Description: {group.description}
+              </p>
+            )}
+            <div className="muted" style={{ fontSize: 13 }}>
+              <strong> Split mode: {group?.splitMode || "equal"}</strong>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Tabs */}
+      <div className="tabs">
+        <NavLink
+          to=""
+          end
+          className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
+        >
+          Members
+        </NavLink>
+
+        <NavLink
+          to="expenses"
+          className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
+        >
+          Expenses
+        </NavLink>
+
+        <NavLink
+          to="balances"
+          className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
+        >
+          Balances
+        </NavLink>
+      </div>
+
+      {/* Pass group down to tabs */}
+      <Outlet context={{ group, loadingGroup, groupError,bumpGroupVersion }} />
+    </div>
+  );
+};
+
 export default GroupPage;

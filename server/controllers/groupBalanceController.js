@@ -54,6 +54,13 @@ export const getGroupBalence = async(req,res,next)=>{
             if(!members.length)
                 return next(httpErrorHandler('There is no activ member for this Group',400)) 
             
+            const splitDetails = members.map((m) => ({
+            userId: m.userId._id,
+            name: m.userId.name,
+            percentage: Number(m.percentage ?? 0),
+            share: Number(m.share ?? 0),
+            }));
+
             const balances ={};
             /// create-> id:{userId:_id ,name:name ,balace:0}
            for(const m of members){
@@ -179,6 +186,7 @@ export const getGroupBalence = async(req,res,next)=>{
                 settelment,
                 totalEachUserIdPaid,
                 totalGroupPaid,
+                splitDetails,
             })
             
 
