@@ -98,18 +98,18 @@ console.log('totalEachUserPaidNumber :',totalEachUserPaidNumber)
             {!loading && !error && data && (
             <>
              <div className="card">
-                <h4 style={{ marginTop: 0 }}>Split details</h4>
+                <h4 className="mt-0">Split details</h4>
 
                 {data.splitMode === "equal" ? (
-                    <p className="muted" style={{ margin: 0 }}>
+                    <p className="muted m-0">
                     Equal split (everyone shares expenses equally).
                     </p>
                 ) : (
-                    <div className="stack" style={{ gap: 6 }}>
+                    <div className="stack gap-6">
                     {(data.splitDetails || []).map((m) => (
                         <div key={m.userId} className="row-between">
                         <div>{m.name}</div>
-                        <div style={{ fontWeight: 600 }}>
+                        <div className="fw-600">
                             {data.splitMode === "percentage"
                             ? `${m.percentage}%`
                             : `${m.share} share`}
@@ -118,7 +118,7 @@ console.log('totalEachUserPaidNumber :',totalEachUserPaidNumber)
                     ))}
 
                     {data.splitMode === "percentage" && (
-                        <p className="muted" style={{ marginTop: 8 }}>
+                        <p className="muted mt-8" >
                         Total must equal 100%.
                         </p>
                     )}
@@ -126,19 +126,19 @@ console.log('totalEachUserPaidNumber :',totalEachUserPaidNumber)
                 )}
               </div>
                 <div className="card">
-                    <p style={{ marginBottom: 0 }}>
+                    <p className="mv-0">
                     <strong>The Total Group spent:</strong> {money(totalGroupPaidNumber)}
                     </p>
                 </div>
                 <div className="card" >
-                   <h4  style={{ marginTop: 16 }}> Each Member Spent </h4>
+                   <h4  className="mt-16"> Each Member Spent </h4>
                 {totalEachUserPaidNumber.map((p,idx)=>(
                     <p key={idx}>{`${p.name} paid so far: $${p.total}` }</p>
                 ))}
                 </div>
-                    <h4 style={{ marginTop: 16 }}>Who pays who (settlement)</h4>
+                    <h4 className="mt-16">Who pays who (settlement)</h4>
                 {Array.isArray(data.settelment) && data.settelment.length>0 ?(
-                    <div>
+                    <div  className="card">
                         {data.settelment.map((s,idx)=>(
                             <div key={idx}>
                                 <strong>{s.fromName}</strong> pays: ${Number(s.amount).toFixed(2)} to <strong>{s.toName}</strong>
@@ -146,12 +146,12 @@ console.log('totalEachUserPaidNumber :',totalEachUserPaidNumber)
                         ))}
                     </div>
                 ):(<p>No Settlement needed(already even)</p>)}    
-            
-             <p style={{ marginTop: 12, opacity: 0.8 }}>
-            Note: If someone voids an expense, the balance will update the next time you load this tab.
-          </p>
-            </>
-        ) }
+                    
+                    <p className="mt-12 op-80">
+                    Note: If someone voids an expense, the balance will update the next time you load this tab.
+                </p>
+             </>
+             ) }
         </div>
         
     )

@@ -50,14 +50,14 @@ const GroupPage = () => {
         ) : groupError ? (
           <ErrorBanner message={groupError} onClose={() => setGroupError("")} />
         ) : (
-          <div className="stack" style={{ gap: 6 }}>
-            <h2 style={{ margin: 0 }}>Group: {group?.name || "Group"}</h2>
+          <div className="stack gap-6" >
+            <h2 className="m-0">Group: {group?.name || "Group"}</h2>
             {!!group?.description && (
-              <p className="muted" style={{ margin: 0 }}>
+              <p className="muted m-0" >
                 Group Description: {group.description}
               </p>
             )}
-            <div className="muted" style={{ fontSize: 13 }}>
+            <div className="muted text-md" >
               <strong> Split mode: {group?.splitMode || "equal"}</strong>
             </div>
           </div>

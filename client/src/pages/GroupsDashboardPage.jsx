@@ -203,20 +203,20 @@ const GroupsDashboardPage = ()=>{
         ):(
          <>
                       {/* User section */}
-          <div style={{ marginBottom: 16 }}>
-            <p style={{ margin: 0 }}>
+          <div className="mb-16">
+            <p className="m-0">
               <strong>Name:</strong> {displayName}
             </p>
-            <p style={{ margin: 0 }}>
+            <p className="m-0">
               <strong>Email:</strong> {displayEmail}
             </p>
           </div>
-          <h4 style={{ marginBottom: 8 }}>Groups you are a member of:</h4>
+          <h4 className="mb-8">Groups you are a member of:</h4>
 
             {memberships.length === 0 ? (
             <p>No groups yet. Create one below.</p>
             ) : (
-               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+               <div className="flex-col gap-10">
                 {memberships.map((m)=>{
                    const g = m.groupId; 
                    if (!g) return null;
@@ -228,31 +228,19 @@ const GroupsDashboardPage = ()=>{
                     return(
                         <div
                         key={g._id}
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "flex-start",
-                            padding: "10px 12px",
-                            border: "1px solid #e5e5e5",
-                            borderRadius: 10,
-                            gap: 12,
-                        }}
+                        className="card row-between gap-12"
                         >
                             {/*clickable group */}
                             <Link
                             to={`/app/groups/${g._id}`}
-                            style={{
-                                flex:1,
-                                textDecoration:'none',
-                                color:'inherit'
-                            }}
+                                className="flex-1 link-reset"
                             >
-                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                <div className="flex-col">
                                     <strong>{g.name}</strong>
-                                    <span style={{ fontSize: 12, opacity: 0.8 }}>
+                                    <span className="text-sm op-80">
                                         {g.description}
                                     </span>
-                                    <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>
+                                    <div className="mt-6 text-sm op-75">
                                         Created: {createdAt} | Role: {m.role}
                                         {g.status? ` | Status: ${g.status}` : ''}
                                     </div>

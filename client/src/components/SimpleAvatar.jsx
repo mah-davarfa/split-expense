@@ -29,7 +29,8 @@ export const SimpleAvatar =({name,profilePicture})=>{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#f7f7f7",
+        background: "var(--card)",
+        color: 'var(--text)',
         fontWeight: 700,
         flex: "0 0 auto",
         userSelect: "none"

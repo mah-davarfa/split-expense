@@ -59,8 +59,9 @@ export const AIAssistant = ()=>{
                 width: 54,
                 height: 54,
                 borderRadius: "50%",
-                border: "1px solid #ddd",
-                background: "white",
+                border: "1px solid var(--border)",
+                background: "var(--card)",
+                color:"var(--text)",
                 cursor: "pointer",
                 zIndex: 9999,
                 fontSize: 20,
@@ -86,13 +87,13 @@ export const AIAssistant = ()=>{
                     style={{
                     height: "45vh",
                     overflowY: "auto",
-                    border: "1px solid #eee",
+                    border: "1px solid var(--border)",
                     borderRadius: 10,
                     padding: 10,
                     display: "flex",
                     flexDirection: "column",
                     gap: 10,
-                    background: "#fafafa",
+                    background: "var(--bg)",
                     }}
                   >
 
@@ -110,8 +111,9 @@ export const AIAssistant = ()=>{
                                     maxWidth: "80%",
                                     padding: "8px 10px",
                                     borderRadius: 12,
-                                    background: m.role === "user" ? "#e8f0ff" : "white",
-                                    border: "1px solid #e5e5e5",
+                                    background: m.role === "user" ? "var(--primary-100)" : "var(--card)",
+                                    color:"var(--text)",
+                                    border: "1px solid var(--border)",
                                     whiteSpace: "pre-wrap",
                                 }}
                             >
@@ -143,4 +145,4 @@ export const AIAssistant = ()=>{
         </>
     )
     }
-
+

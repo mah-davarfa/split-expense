@@ -332,7 +332,7 @@ return (
                   {exp.description} | $
                   {Number(exp.amount).toFixed(2)}
                   {exp.status === "voided" && (
-                    <strong style={{ marginLeft: 8, color: "red" }}>
+                    <strong className="text-red" style={{ marginLeft: 8}}>
                       (VOIDED)
                     </strong>
                   )}
@@ -362,10 +362,8 @@ return (
             {/* Receipts */}
             {Array.isArray(exp.receiptUrl) &&
               exp.receiptUrl.length > 0 && (
-                <div
+                <div className="flex gap-8"
                   style={{
-                    display: "flex",
-                    gap: 8,
                     flexWrap: "wrap",
                   }}
                 >
@@ -410,7 +408,7 @@ return (
     <div>
       {addExpenceNotClicked ? (
         <button
-          className="btn-primary"
+          
           onClick={addHandler}
         >
           Add Expense
@@ -464,10 +462,8 @@ return (
           />
 
           {previews.length > 0 && (
-            <div
+            <div className="flex gap-10"
               style={{
-                display: "flex",
-                gap: 10,
                 flexWrap: "wrap",
               }}
             >
@@ -487,10 +483,8 @@ return (
             </div>
           )}
 
-          <div
+          <div className="flex gap-8"
             style={{
-              display: "flex",
-              gap: 8,
               justifyContent: "flex-end",
             }}
           >
@@ -502,7 +496,7 @@ return (
             </button>
             <button
               type="submit"
-              className="btn-primary"
+              
             >
               Add
             </button>
@@ -523,8 +517,8 @@ return (
                 <img
                 src={receiptSrc}
                 alt="receipt full"
+                className="w-full"
                 style={{
-                    width: "100%",
                     maxHeight: "70vh",
                     objectFit: "contain",
                     borderRadius: 8,
@@ -543,7 +537,7 @@ return (
                 }}
             >
                 <form onSubmit={submitVoid}>
-                <p style={{ marginTop: 0 }}>
+                <p className="mt-0">
                     Void: <strong>{voidTarget?.description}</strong>
                 </p>
 
@@ -559,7 +553,7 @@ return (
                     disabled={voidSubmitting}
                 />
 
-                <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
+                <div className="flex gap-8" style={{ marginTop: "12px" }}>
                     <button
                     type="button"
                     onClick={() => {
@@ -626,7 +620,7 @@ return (
                     />
                 </div>
 
-                <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
+                <div className="flex gap-8" style={{ marginTop: "12px"}}>
                     <button
                         type="button"
                         onClick={() => {

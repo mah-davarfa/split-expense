@@ -62,7 +62,12 @@ export default function Modal({ title = "Modal", onClose, children }) {
           <div style={panelStyle}>
               <div style={headerStyle}>
               <h3 style={{ margin: 0, fontSize: "18px" }}>{title}</h3>
-              <button type="button" onClick={onClose} aria-label="Close">
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close"
+                className="modal-close"
+              >
                   ✕
               </button>
               </div>

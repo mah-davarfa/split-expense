@@ -344,7 +344,7 @@ export const GroupMembersTab = () => {
                     Edit split
                   </button>
                 ) : (
-                  <div style={{ display: "flex", gap: 10 }}>
+                  <div className="flex gap-10">
                     <button onClick={cancelEditSplit} disabled={splitSaving}>
                       Cancel
                     </button>
@@ -368,13 +368,13 @@ export const GroupMembersTab = () => {
 
               {/* VIEW MODE: show saved values */}
               {!splitEditing && (
-                <div style={{ marginTop: 10 }}>
+                <div className="mt-10">
                   {savedSplitMode === "equal" ? (
-                    <div style={{ fontSize: 13, opacity: 0.85 }}>
+                    <div className="text-md op-85">
                       Equal split is active. No custom values needed.
                     </div>
                   ) : (
-                    <div style={{ display: "grid", gap: 8 }}>
+                    <div className="grid gap-8">
                       {eligibleMembers.map((m) => {
                         const uid = m.userId._id;
                         const name = m.userId.name || m.inviteEmail || "Member";
@@ -404,7 +404,7 @@ export const GroupMembersTab = () => {
               {splitEditing && (
                 <div style={{ marginTop: 12 }}>
                   <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                    <label style={{ fontSize: 13, opacity: 0.85 }}>
+                    <label className="text-md op-85">
                       Split mode:
                     </label>
                     <select
@@ -422,7 +422,7 @@ export const GroupMembersTab = () => {
                         }
                       }}
                       disabled={splitSaving}
-                      style={{ minWidth: 160 }}
+                      className="minw-160"
                     >
                       <option value="equal">Equal</option>
                       <option value="percentage">Percentage</option>
@@ -476,7 +476,7 @@ export const GroupMembersTab = () => {
                                       : Number(e.target.value),
                                 }))
                               }
-                              style={{ width: 140 }}
+                              className="w-140"
                               disabled={splitSaving}
                             />
                           </div>
@@ -623,7 +623,7 @@ export const GroupMembersTab = () => {
             from the group?
           </p>
 
-          <p style={{ fontSize: 13, opacity: 0.85 }}>
+          <p className="text-md op-85">
             This will set membership to <strong>inactive</strong>. If this member
             has expense activity, the backend will reject the removal.
           </p>
