@@ -28,13 +28,19 @@ const AppLayout = ()=>{
         <div className="app-shell" data-theme={theme}>
             <header className="app-header">
                 <div className="app-header-inner">
-                    <Link to='/app/groups'>Group Dashboard</Link>
+                    <Link className="brand" to='/app/groups'>
+                    Group Dashboard
+                    </Link>
                 <nav className="header-nav">
-                    <button onClick={toggleTheme}>
+                    <button type="button" onClick={toggleTheme} aria-label="Toggle theme">
                      {theme === "light" ? "Dark" : "Light"}
                     </button>
-                    <Link to='/app/profile'>Profile</Link>
-                    <button onClick={logout}>Logout</button>
+                    <Link className="link" to='/app/profile'>
+                    Profile
+                    </Link>
+                    <button type="button" onClick={logout}>
+                        Logout
+                    </button>
                 </nav>
                 </div>
 

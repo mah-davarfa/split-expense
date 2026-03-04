@@ -42,6 +42,31 @@ body {
   min-height: 100dvh;
 }
 
+/* =========================
+   AppLayout Theme (scoped)
+   Only affects authenticated area
+   ========================= */
+
+.app-shell[data-theme="dark"] {
+  --bg: #04160f;
+  --card: rgba(8, 55, 39, 0.92);
+  --text: rgba(234, 255, 245, 0.92);
+  --muted: rgba(234, 255, 245, 0.72);
+  --border: rgba(255, 255, 255, 0.14);
+
+  --primary: #1eea8a;
+  --primary-100: rgba(46, 235, 154, 0.18);
+}
+
+/* App background should follow the app theme */
+.app-shell {
+  background: var(--bg);
+}
+
+/* Optional: make header buttons/links feel better in dark app */
+.app-shell[data-theme="dark"] .link:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
 .app-header {
   position: sticky;
   top: 0;
