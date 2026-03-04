@@ -12,7 +12,17 @@
 
   --radius: 12px;
 }
+/* Dark Theme for AppLayout only */
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #111827;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --border: #374151;
 
+  --primary: #22c55e;
+  --primary-100: #052e16;
+}
 * { box-sizing: border-box; }
 
 html, body { height: 100%; }

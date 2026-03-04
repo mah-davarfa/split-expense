@@ -1,9 +1,23 @@
 import {Outlet , Link,useNavigate} from 'react-router-dom'
+import { useState, useEffect } from "react";
 import {AIAssistant }from '../components/AIAssistant.jsx'
 
 const AppLayout = ()=>{
 
         const navigate = useNavigate();
+
+          // load saved theme or default to light
+        const [theme, setTheme] = useState(
+            localStorage.getItem("app-theme") || "light"
+        );
+
+        useEffect(() => {
+            localStorage.setItem("app-theme", theme);
+        }, [theme]);
+
+        const toggleTheme = () => {
+            setTheme((prev) => (prev === "light" ? "dark" : "light"));
+        };
 
         const logout = ()=>{
             localStorage.removeItem('token')
@@ -11,11 +25,14 @@ const AppLayout = ()=>{
             navigate('/login');
         }
     return(
-        <div className="app-shell">
+        <div className="app-shell" data-theme={theme}>
             <header className="app-header">
                 <div className="app-header-inner">
                     <Link to='/app/groups'>Group Dashboard</Link>
                 <nav className="header-nav">
+                    <button onClick={toggleTheme}>
+                     {theme === "light" ? "Dark" : "Light"}
+                    </button>
                     <Link to='/app/profile'>Profile</Link>
                     <button onClick={logout}>Logout</button>
                 </nav>
