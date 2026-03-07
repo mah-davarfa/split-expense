@@ -3,8 +3,8 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 const PublicLayout = () => {
   const { pathname } = useLocation();
 
-  const isLanding = pathname === "/";
-  const isAuth = pathname === "/login" || pathname === "/signup";
+  const isLanding = pathname === "/" ;
+  const isAuth = pathname === "/login" || pathname === "/signup" || pathname === '/reset-password' || pathname ==='/invite';
 
   // Landing stays custom (no header)
   if (isLanding) return <Outlet />;

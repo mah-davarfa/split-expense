@@ -75,7 +75,7 @@ const ResetPassword=()=>{
 return(
     <>    
    
-   <div className="auth-page">
+   <div>
      <ErrorBanner message={error} onClose={()=>setError('')}/>  
     <form
     className="auth-form"

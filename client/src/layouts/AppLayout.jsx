@@ -10,7 +10,7 @@ const AppLayout = ()=>{
 
           // load saved theme or default to light
         const [theme, setTheme] = useState(
-            localStorage.getItem("app-theme") || "light"
+            localStorage.getItem("app-theme") || "dark"
         );
 
         useEffect(() => {
