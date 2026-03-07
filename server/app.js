@@ -8,7 +8,10 @@ import signup from './controllers/signupController.js'
 import groupsRouter from './routes/groups.routes.js'
 import inviteRouter from './routes/invites.routes.js'
 import aiRouter from './routes/ai.routes.js'
+import userRouter from "./routes/user.routes.js";
 import authToken from "./middlewares/auth.js";
+import {forgotPasswordEmailTokenController} from './controllers/forgotPasswordController.js'
+import {resetingPassword} from './controllers/resetingPasswordController.js'
 import "dotenv/config";
 
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
@@ -40,9 +43,21 @@ app.use(helmet());
   message: { error: "Too many AI requests. Try again later." },
 });
 
+ const resetPasswordLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 10 minutes
+  limit: 5,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many password Reset requests. Try again later." },
+});
 
-
-
+ const resetingPasswordLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 10 minutes
+  limit: 5,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many password Reset requests. Try again later." },
+});
 
 
 // / test Landing
@@ -58,14 +73,22 @@ app.post('/login',authLimiter,signin)
 // /signup
 app.post('/signup',authLimiter,signup)
 
-
-
+//POST/forgot-password
+app.post('/forgot-password',resetPasswordLimiter,forgotPasswordEmailTokenController)
+//POST /reset-password
+app.post('/reset-password',resetingPasswordLimiter,resetingPassword)
 
 //////mounted paths //////
 //POST /api/ai/assistant
 app.use('/api/ai',aiLimiter,aiRouter)
 //POST /api/invites/accept { token } 
 app.use('/api/invites', inviteRouter)
+
+
+
+
+
+
 
 //POST /api/groups (create group)DONE
 //GET /api/groups (shows groups and user info Dashbord)DONE
@@ -95,7 +118,7 @@ app.use('/api/groups',groupsRouter)
 //DELETE /api/groups/:goupId/expenses/:expensesId (DELETE one of it's own expense)DONE
 
 //GET /api/groups/:groupId/balances (balance sheet)DONE
-
+app.use('/api/user',userRouter)
 ////setting controller//////
 //GET /api/user/settings (profile/settings)
 //PUT /api/user/settings(editing profile)

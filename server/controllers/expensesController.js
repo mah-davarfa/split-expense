@@ -59,7 +59,12 @@ export const addExpense = async(req,res,next)=>{
 
            
             let receiptUrl = [];
-
+// file:{
+//   buffer: <Buffer ...>,
+//   mimetype: "image/jpeg",
+//   originalname: "receipt.jpg",
+//   size: 123456
+// }
             if (req.files && req.files.length > 0) {
             const uploaded = await Promise.all(
                 req.files.map((file) => uploadBufferToCloudinary(file.buffer))

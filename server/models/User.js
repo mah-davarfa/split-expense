@@ -20,11 +20,20 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    forgotPasswordToken:{
+        type:String
+    },
+    forgotPasswordTokenExpiration:{
+        type:Date
+    },
     profilePicture:{
         type:String,
         trim:true,
-        
     },
+    profilePicturePublicId: {
+         type: String,
+          default: "" 
+        },
 
 },
     {timestamps:true}

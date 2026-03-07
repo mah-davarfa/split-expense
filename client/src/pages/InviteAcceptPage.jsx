@@ -61,7 +61,7 @@ export default function InviteAcceptPage() {
     },[params, user, navigate])
 
      return (
-    <div style={{ padding: 16 }}>
+    <div className="auth-page" style={{ padding: 16 }}>
       <h2>Accepting invitation…</h2>
       {error && <ErrorBanner message={error} onClose={() => setError("")} />}
       {loading && <LoadingSpinner label="Processing invite..." />}

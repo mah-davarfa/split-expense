@@ -13,3 +13,9 @@ export const uploadReceipts = multer({
   fileFilter,
   limits: { fileSize: 5 * 1024 * 1024, files: 6 }, // up to 6 images, 5MB each
 }).array("receipts", 6);
+// file:{
+//   buffer: <Buffer ...>,
+//   mimetype: "image/jpeg",
+//   originalname: "receipt.jpg",
+//   size: 123456
+// }

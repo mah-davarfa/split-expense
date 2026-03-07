@@ -27,6 +27,8 @@ const signup = async(req,res, next)=>{
     if(!/^[^<>&]+$/.test(name.trim()))
       return next(httpErrorHandler('name  cannot contain <, >, or &',400));
     
+    if(password.trim().length < 5)
+      return nexr(httpErrorHandler('password can not be less than 5 characters', 400))
     
     const cleanUser = await  User.findOne({email:email.trim().toLowerCase()})
     if(cleanUser)

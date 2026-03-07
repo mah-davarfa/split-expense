@@ -1,9 +1,11 @@
 import {Outlet , Link,useNavigate} from 'react-router-dom'
 import { useState, useEffect } from "react";
 import {AIAssistant }from '../components/AIAssistant.jsx'
-
+import { useAuth } from '../auth/AuthProvider.jsx'
+import { SimpleAvatar } from '../components/SimpleAvatar.jsx'
 const AppLayout = ()=>{
 
+    const { user } = useAuth();
         const navigate = useNavigate();
 
           // load saved theme or default to light
@@ -36,7 +38,11 @@ const AppLayout = ()=>{
                      {theme === "light" ? "Dark" : "Light"}
                     </button>
                     <Link className="link" to='/app/profile'>
-                    Profile
+                    <SimpleAvatar
+                        name={user?.name || "User"}
+                        profilePicture={user?.profilePicture}
+                        size={32}
+                    />
                     </Link>
                     <button type="button" onClick={logout}>
                         Logout

@@ -122,7 +122,8 @@ export const AIAssistant = ()=>{
                          ))
                         )}
               </div>
-                    <form onSubmit={send} style={{ display: "flex", gap: 8, marginTop: 10 }} >
+                    <form onSubmit={send} 
+                    style={{ display: "flex", gap: 8, marginTop: 10 }} >
                         <input
                             value={text}
                             onChange={(e) => setText(e.target.value)}
@@ -131,7 +132,9 @@ export const AIAssistant = ()=>{
                             style={{ flex: 1, padding: "10px 12px" }}
                             maxLength={500}
                         />
-                        <button type='submit' disabled={loading || !text.trim()}>
+                        <button 
+                        type='submit' 
+                        disabled={loading || !text.trim()}>
                             send
                         </button>
                     </form>
@@ -145,4 +148,4 @@ export const AIAssistant = ()=>{
         </>
     )
     }
-
+

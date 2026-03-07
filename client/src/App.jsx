@@ -9,7 +9,7 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import AppLayout from './layouts/AppLayout.jsx' 
 import GroupsDashboardPage from './pages/GroupsDashboardPage.jsx'
 import InviteAcceptPage from './pages/InviteAcceptPage.jsx'
-
+import ResetPassword from './pages/ResetPassword.jsx'
 import GroupPage from'./pages/GroupPage.jsx'
 import GroupMembersTab from './pages/GroupMembersTab.jsx'
 import GroupExpensesTab from './pages/GroupExpensesTab.jsx'
@@ -28,6 +28,7 @@ function App() {
           <Route path='/signup' element={<SignupPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/invite' element={<InviteAcceptPage/>}/>
+          <Route path='/reset-password' element={<ResetPassword/>} />
       </Route>
 
       <Route element={<ProtectedRoute/>}>

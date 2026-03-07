@@ -23,7 +23,13 @@ const AuthProvider = ({children})=>{
             navigate("/app");
         }
     }
-       
+
+    // Add inside AuthProvider component:
+       const setUserAndPersist = (nextUser) => {
+        setUser(nextUser);
+        localStorage.setItem("user", JSON.stringify(nextUser));
+        };
+        
     const checkAuth = async () => {
         const token = localStorage.getItem("token");
 
@@ -102,6 +108,23 @@ const AuthProvider = ({children})=>{
         }
 
     }
+    const sendForgotPassword = async(email)=>{
+        try{
+            const data = await authApi('/forgot-password',{body:{email}})
+
+        }catch(err){
+            throw err;
+        }
+    }
+
+    const sendResetPassword =async({password,token})=>{
+        try{
+             const data = await authApi('/reset-password',{body:{password,token}})
+             
+        }catch(err){
+            throw(err)
+        }
+    }
 
     const logout = ()=>{
         localStorage.removeItem('token');
@@ -120,7 +143,10 @@ const AuthProvider = ({children})=>{
             isUserAuthenticated,
             isLoading,
             user,
-            getToken
+            getToken,
+            setUserAndPersist,
+            sendForgotPassword,
+            sendResetPassword
         }}>
             {children}
         </AuthContext.Provider>

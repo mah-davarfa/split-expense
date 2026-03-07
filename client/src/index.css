@@ -12,17 +12,7 @@
 
   --radius: 12px;
 }
-/* Dark Theme for AppLayout only */
-[data-theme="dark"] {
-  --bg: #0f172a;
-  --card: #111827;
-  --text: #f3f4f6;
-  --muted: #9ca3af;
-  --border: #374151;
 
-  --primary: #22c55e;
-  --primary-100: #052e16;
-}
 * { box-sizing: border-box; }
 
 html, body { height: 100%; }
@@ -60,6 +50,16 @@ body {
   --primary-100: rgba(46, 235, 154, 0.18);
 }
 
+.app-shell[data-theme="light"] {
+  --bg: #a4a5a695;
+  --card: #d4cec9;
+  --text: #111827;
+  --muted: #676c78;
+  --border: #e5e7eb;
+
+  --primary: #2563eb;
+  --primary-100: #dbeafe;
+}
 /* App background should follow the app theme */
 .app-shell {
   background: var(--bg);
