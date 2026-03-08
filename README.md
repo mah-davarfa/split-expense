@@ -7,7 +7,7 @@ Current version: Web Application
 Future version planned: Mobile Application using Capacitor
 
 
-# Live Demo
+# Live: https://splitexpenseai.online/
 
 
 
@@ -160,6 +160,156 @@ Handles email delivery.
 # OpenAI
 Provides AI assistant functionality.
 
+## Deployment
+The application is deployed using a cloud-based production architecture.
+
+### Domain
+A custom domain was purchased and configured using **Namecheap**
+https://splitexpenseai.online
+
+
+The domain is used to provide a clean production URL for the application.
+
+Subdomains were created to separate application services:
+Frontend: https://splitexpenseai.online
+
+Backend API: https://api.splitexpenseai.online
+
+Email Sender: mail.splitexpenseai.online
+### Frontend Hosting
+
+The React frontend is deployed on **Render Static Sites**.
+
+Render automatically builds the application using:
+npm install
+npm run build
+
+
+and publishes the compiled **dist** folder.
+
+Auto-deploy is enabled, so every push to the `main` branch triggers a new deployment.
+
+---
+
+### Backend Hosting
+
+The backend API is deployed on **Render Web Services**.
+
+The Express server provides all REST API endpoints including:
+
+- authentication
+- group management
+- expenses
+- balances
+- invitations
+- password reset
+- AI assistant
+
+The backend is accessible at:
+https://api.splitexpenseai.online
+
+
+---
+
+### Database
+
+The application uses **MongoDB Atlas** as a cloud database.
+
+MongoDB stores:
+
+- users
+- groups
+- group members
+- expenses
+- chat sessions
+
+Atlas allows the Render backend to securely connect to the database.
+
+---
+
+### Email Delivery
+
+The application sends transactional emails using **Resend**.
+
+Emails are used for:
+
+- group invitations
+- password reset links
+
+To enable production email sending, a subdomain was created:
+
+Resend required several DNS records to verify the domain.
+
+These were added in **Namecheap Advanced DNS**:
+
+**DKIM**
+TXT
+resend._domainkey.mail
+
+Allows Resend to cryptographically sign outgoing emails.
+
+**SPF**
+TXT
+send.mail
+v=spf1 include:amazonses.com ~all
+
+Authorizes Resend / Amazon SES to send emails from the domain.
+
+**MX**
+MX
+send.mail → feedback-smtp.us-east-1.amazonses.com
+
+Used by the email service infrastructure.
+
+After verification, the backend email sender was configured as:
+
+Used by the email service infrastructure.
+
+After verification, the backend email sender was configured as:
+Split Expense noreply@mail.splitexpenseai.online
+
+This allows the application to send trusted emails to users.
+
+---
+
+### Production Environment
+
+Environment variables are used to securely configure the application in production.
+
+Example backend variables:
+MONGODB_URI
+JWT_SECRET
+RESEND_API_KEY
+OPENAI_API_KEY
+EMAIL_FROM
+FRONTEND_ORIGIN
+APP_PUBLIC_URL
+
+The frontend communicates with the backend using:
+VITE_API_URL=https://api.splitexpenseai.online
+
+
+---
+
+### Production Result
+
+The final deployed architecture:
+
+Frontend
+https://splitexpenseai.online
+
+
+Backend API
+https://api.splitexpenseai.online
+
+
+Database
+MongoDB Atlas
+Email Delivery
+
+Resend
+
+This setup reflects a real-world production deployment used by modern SaaS applications.
 
 
 ## Database Models
