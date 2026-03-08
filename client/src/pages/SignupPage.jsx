@@ -22,6 +22,10 @@ const SignupPage = () => {
       setError("All fields are required.");
       return;
     }
+    if(password.trim().length<5){
+      setError("Passwords must be more than 5 characters.");
+      return;
+    }
     if (password !== passwordConfirm) {
       setError("Passwords do not match.");
       return;
