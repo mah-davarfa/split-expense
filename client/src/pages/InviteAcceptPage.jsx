@@ -70,22 +70,10 @@ export default function InviteAcceptPage() {
   const pendingInvite = sessionStorage.getItem("inviteToken");
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <header className="auth-header">
-          <Link className="auth-navlink" to="/">
-            Home
-          </Link>
-          <Link className="auth-navlink" to="/login">
-            Login
-          </Link>
-          <Link className="auth-navlink" to="/signup">
-            Signup
-          </Link>
-        </header>
-
-        <div className="stack">
-          <h2 className="m-0">Group Invitation</h2>
+  
+     
+        <div className="stack items-center ">
+          <h2 className="m-0 mb-16">Group Invitation</h2>
 
           {error && <ErrorBanner message={error} onClose={() => setError("")} />}
 
@@ -100,15 +88,15 @@ export default function InviteAcceptPage() {
               <p className="auth-foot">
                 You’ve been invited to join a group.
               </p>
-              <p className="auth-foot">
+              <p className="auth-foot ">
                 Log in to accept the invitation. New here? Create an account first,
                 and the invitation will continue automatically after signup.
               </p>
 
-              <div className="stack">
+              <div className="stack ">
                 <button
                   type="button"
-                  className="landing-btn landing-btn-primary"
+                  className="landing-btn landing-btn-primary mb-16 mt-16"
                   onClick={() => navigate("/login")}
                 >
                   Go to Login
@@ -116,7 +104,7 @@ export default function InviteAcceptPage() {
 
                 <button
                   type="button"
-                  className="landing-btn landing-btn-secondary"
+                  className="landing-btn landing-btn-secondary  mt-16"
                   onClick={() => navigate("/signup")}
                 >
                   Create Account
@@ -125,7 +113,7 @@ export default function InviteAcceptPage() {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      
+    
   );
 }
