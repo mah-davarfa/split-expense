@@ -14,7 +14,7 @@ import {forgotPasswordEmailTokenController} from './controllers/forgotPasswordCo
 import {resetingPassword} from './controllers/resetingPasswordController.js'
 import "dotenv/config";
 
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ;
 const app = express();
 app.use(express.json());
 

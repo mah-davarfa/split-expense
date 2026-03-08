@@ -1,70 +1,131 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import ErrorBanner from "../components/ErrorBanner.jsx";
 import { invitesApi } from "../api/invites.api.js";
 
 export default function InviteAcceptPage() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const { getToken, isUserAuthenticated, isLoading } = useAuth();
 
-     const [params] = useSearchParams();
-    const navigate = useNavigate();
-    const { user, getToken } = useAuth();
+  const [pageLoading, setPageLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+  useEffect(() => {
+    const tokenFromUrl = params.get("token");
 
-    useEffect(()=>{
-        const tokenFromUrl = params.get("token");
+    if (tokenFromUrl) {
+      sessionStorage.setItem("inviteToken", tokenFromUrl);
+    }
 
-      if (tokenFromUrl) {
-        sessionStorage.setItem("inviteToken", tokenFromUrl);
-        }
+    const storedInvite = sessionStorage.getItem("inviteToken");
+
+    if (!storedInvite) {
+      setError("Invite token is missing. Please open the invite link again.");
+      setPageLoading(false);
+      return;
+    }
+
+    // Wait until auth status is fully known
+    if (isLoading) {
+      setPageLoading(true);
+      return;
+    }
+
+    // Not authenticated: show instructions instead of instant redirect
+    if (!isUserAuthenticated || !getToken()) {
+      setPageLoading(false);
+      return;
+    }
+
+    // Authenticated: accept invite automatically
+    const acceptInvite = async () => {
+      try {
+        setPageLoading(true);
+        setError("");
+        setSuccessMessage("");
 
         const authToken = getToken();
-        const storedInvite = sessionStorage.getItem("inviteToken");
-    
-        //NOT login or signup yet then redirect
-        if (!authToken) {
-        setLoading(false);
-        navigate("/login")
-        return
-        }
+        const res = await invitesApi.accept(authToken, storedInvite);
 
-        //logged in but no invite token
-        if (!storedInvite) {
-        setError("Invite token is missing. Please open the invite link again.");
-        setLoading(false);
-        return;
-        }
+        sessionStorage.removeItem("inviteToken");
+        setSuccessMessage("Invitation accepted. Redirecting to your group...");
 
-        //user already logedin has invite token then accepting
-        (async()=>{
-            try{
+        setTimeout(() => {
+          navigate(`/app/groups/${res.GroupId}`);
+        }, 1500);
+      } catch (err) {
+        setError(err.message || "Failed to accept invite.");
+      } finally {
+        setPageLoading(false);
+      }
+    };
 
-            setLoading(true);
-            setError("");
+    acceptInvite();
+  }, [params, navigate, getToken, isUserAuthenticated, isLoading]);
 
-            const res = await invitesApi.accept(authToken, storedInvite);
+  const pendingInvite = sessionStorage.getItem("inviteToken");
 
-            sessionStorage.removeItem("inviteToken");
+  return (
+    <div className="auth-page">
+      <div className="auth-card">
+        <header className="auth-header">
+          <Link className="auth-navlink" to="/">
+            Home
+          </Link>
+          <Link className="auth-navlink" to="/login">
+            Login
+          </Link>
+          <Link className="auth-navlink" to="/signup">
+            Signup
+          </Link>
+        </header>
 
-            navigate(`/app/groups/${res.GroupId}`);
+        <div className="stack">
+          <h2 className="m-0">Group Invitation</h2>
 
-            }catch(err){
-                setError(err.message ||  "Failed to accept invite.")
-            }finally{
-                setLoading(false)
-            }
-        })()
+          {error && <ErrorBanner message={error} onClose={() => setError("")} />}
 
-    },[params, user, navigate])
+          {pageLoading && <LoadingSpinner label="Processing invite..." />}
 
-     return (
-    <div className="auth-page" style={{ padding: 16 }}>
-      <h2>Accepting invitation…</h2>
-      {error && <ErrorBanner message={error} onClose={() => setError("")} />}
-      {loading && <LoadingSpinner label="Processing invite..." />}
+          {!pageLoading && !error && successMessage && (
+            <div className="auth-success">{successMessage}</div>
+          )}
+
+          {!pageLoading && !error && !successMessage && pendingInvite && !isUserAuthenticated && (
+            <div className="stack">
+              <p className="auth-foot">
+                You’ve been invited to join a group.
+              </p>
+              <p className="auth-foot">
+                Log in to accept the invitation. New here? Create an account first,
+                and the invitation will continue automatically after signup.
+              </p>
+
+              <div className="stack">
+                <button
+                  type="button"
+                  className="landing-btn landing-btn-primary"
+                  onClick={() => navigate("/login")}
+                >
+                  Go to Login
+                </button>
+
+                <button
+                  type="button"
+                  className="landing-btn landing-btn-secondary"
+                  onClick={() => navigate("/signup")}
+                >
+                  Create Account
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3011";
+const BASE_URL = import.meta.env.VITE_API_URL ;
 
 function isFormData (value){
     return typeof FormData !== 'undefined' && value instanceof FormData;
