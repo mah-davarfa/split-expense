@@ -562,3 +562,15 @@ input:focus {
 .login-submit {
   margin-top: 50px;
 }
+.auth-success {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+
+  background: rgba(30, 234, 138, 0.15);
+  border: 1px solid rgba(30, 234, 138, 0.35);
+
+  color: #eafff5;
+  text-align: center;
+  font-weight: 600;
+}

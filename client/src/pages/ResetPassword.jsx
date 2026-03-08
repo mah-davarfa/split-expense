@@ -77,7 +77,8 @@ return(
    
    <div>
      <ErrorBanner message={error} onClose={()=>setError('')}/>  
-    <form
+   {!success &&(
+            <form
     className="auth-form"
     onSubmit={sendHandler}
     >
@@ -114,8 +115,10 @@ return(
           />
         )}
     </form>
+      )}
+
       {success && (
-          <div className="card">
+          <div className="auth-success">
             Password reset successful! Redirecting to login...
           </div>
         )}
