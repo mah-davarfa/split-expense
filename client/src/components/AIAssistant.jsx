@@ -55,7 +55,7 @@ export const AIAssistant = ()=>{
                 style={{
                 position: "fixed",
                 right: 18,
-                bottom: 18,
+                bottom: 65,
                 width: 54,
                 height: 54,
                 borderRadius: "50%",
