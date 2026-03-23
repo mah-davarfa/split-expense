@@ -13,7 +13,12 @@ New version: Mobile-ready application using Capacitor (iOS support added)
 
 # Demo Video: https://youtu.be/vi3reMgcl48
 
+## Demo Account (For Recruiters)
 
+To quickly evaluate the application without creating a new account:
+
+Email: mah.davarfa@gmail.com  
+Password: 123456  
 
 # Screenshots
 ![LandingPage](final-screenshots/loginPage.png)
