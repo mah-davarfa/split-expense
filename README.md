@@ -4,7 +4,7 @@ A full-stack expense sharing web application that allows groups of users to trac
 The application also includes an AI assistant that helps users understand spending patterns and group balances.
 This project was built as a Full-Stack JavaScript capstone project.
 Current version: Web Application
-Future version planned: Mobile Application using Capacitor
+New version: Mobile-ready application using Capacitor (iOS support added)
 
 
 # Live: https://splitexpenseai.online/
@@ -26,6 +26,36 @@ Future version planned: Mobile Application using Capacitor
 ![Expenses](final-screenshots/GroupDashboardPage-Edit-Dark-Mode.png)
 ![Forgot-Password](final-screenshots/forgotPassword.png)
 ![Members](final-screenshots/GroupMemberPage-invitingPage-Light-mode.png)
+
+---
+##  Mobile Application (Capacitor Integration)
+
+The application has been extended to support mobile platforms using **Capacitor**.
+
+### What was added:
+- iOS native project (`client/ios`)
+- Capacitor configuration (`capacitor.config.json`)
+- Native assets (App icons, splash screens)
+- Xcode project integration
+
+### How it works:
+- The React app is built (`npm run build`)
+- Capacitor syncs the build into the native iOS project
+- The app runs inside a native WebView
+
+### Commands used:
+```bash
+npm run build
+npx cap sync
+npx cap open ios
+
+Platform Support:
+✅ iOS (via Xcode on Mac)
+⚠️ Android (can be added later)
+Important Notes:
+iOS builds require macOS + Xcode
+Windows machines can develop web app but cannot build iOS apps
+Capacitor bridges web app → native mobile app
 
 ## Features
 # Authentication
@@ -120,6 +150,9 @@ password reset emails
 # AI Integration
 OpenAI API
 
+# Mobile
+Capacitor (iOS integration)
+
 # Security
 Helmet
 CORS
@@ -147,6 +180,11 @@ users
 groups
 expenses
 chat sessions
+
+# mobailw Layer
+Capacitor acts as a bridge between:
+Web app (React)
+Native mobile (iOS)
 
 # External Services
 Cloudinary
@@ -348,11 +386,11 @@ createdAt
 |── split-expense
 │
 │   ├── client
-│   │
+│   │   |── ios
 │   │   ├── public
-│   │
+│   │   |
 │   │   ├── src
-│   │   │
+│   │   │── capacitor.config.json
 │   │   │── api
 │   │   │   ├── ai.api.js
 │   │   │   ├── auth.api.js
@@ -508,14 +546,19 @@ npm run dev
 cd split-expense/client
 npm install
 npm run dev
+## Capacitor Setup 
+cd client
+npm run build
+npx cap sync
+npx cap open ios
 
 ###### Future Improvements
 Planned improvements include:
-Mobile application using Capacitor
+Mobile application (Android support)
 Real-time updates
 Expense analytics
 Notifications
-Smart AI budgeting insights
+AI budgeting insights
 
 ## Author
 Mahmoud Davarfara
@@ -526,5 +569,5 @@ GitHub
 https://github.com/mah-davarfa
 
 Portfolio
-https://mah-davarfa.github.io/portfolio-projects/
+https://mah-davarfa.github.io/portfolio-MahmoudDavarfara/
 
