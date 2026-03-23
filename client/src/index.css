@@ -620,3 +620,19 @@ input:focus {
   text-align: center;
   font-weight: 600;
 }
+.landing-video {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.landing-video-link {
+  font-size: 13px;
+  color: rgba(234, 255, 245, 0.7);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.landing-video-link:hover {
+  text-decoration: underline;
+  color: #1eea8a;
+}

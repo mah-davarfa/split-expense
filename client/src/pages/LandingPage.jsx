@@ -35,6 +35,16 @@ const LandingPage = () => {
             Log In
           </button>
         </div>
+        <div className="landing-video">
+        <a
+          href="https://youtu.be/vi3reMgcl48"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="landing-video-link"
+        >
+          🎥 How to use This App? Watch 5-minute demo
+        </a>
+      </div>
       </div>
     </div>
   );
