@@ -42,7 +42,7 @@ const LandingPage = () => {
           rel="noopener noreferrer"
           className="landing-video-link"
         >
-          🎥 How to use This App? Watch 5-minute demo
+          🎥 How to Use This App — Watch the 5‑Minute Demo
         </a>
       </div>
       </div>
