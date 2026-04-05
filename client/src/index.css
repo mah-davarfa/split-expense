@@ -647,3 +647,66 @@ input:focus {
         50% { box-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 15px #8a2be2, 0 0 20px #8a2be2; }
         100% { box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #00f, 0 0 20px #00f; }
     }
+    /* =========================
+   Group Expenses Summary Layout
+   Mobile: summary stacked on top
+   Desktop: summary on right side
+   ========================= */
+
+.expenses-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.expenses-main {
+  min-width: 0;
+}
+
+.expenses-summary-col {
+  order: -1; /* mobile: show summary first */
+}
+
+.expenses-summary-card {
+  position: static;
+}
+
+.summary-total-box {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.summary-total-amount {
+  margin-top: 6px;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.summary-member-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+@media (min-width: 900px) {
+  .expenses-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: start;
+  }
+
+  .expenses-summary-col {
+    order: 0;
+  }
+
+  .expenses-summary-card {
+    position: sticky;
+    top: 84px;
+  }
+}

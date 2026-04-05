@@ -34,7 +34,7 @@ export default function LoadingSpinner({label='Loading...'}) {
         {`@keyframes spin { to { transform: rotate(360deg); } }`}
       </style> */}
       <style>
-        {'@keyframes conectTo {100% { transform: translateX(100%); }}'}
+        {'@keyframes conectTo {50% { transform: translateX(50%); }}'}
       </style>
     </div>
   );
