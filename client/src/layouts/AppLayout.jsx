@@ -30,24 +30,25 @@ const AppLayout = ()=>{
         <div className="app-shell" data-theme={theme}>
             <header className="app-header">
                 <div className="app-header-inner">
-                    <Link className="brand" to='/app/groups'>
-                    Group Dashboard
-                    </Link>
-                <nav className="header-nav">
-                    <button type="button" onClick={toggleTheme} aria-label="Toggle theme">
-                     {theme === "light" ? "Dark" : "Light"}
-                    </button>
-                    <Link className="link" to='/app/profile'>
-                    <SimpleAvatar
-                        name={user?.name || "User"}
-                        profilePicture={user?.profilePicture}
-                        size={32}
-                    />
-                    </Link>
-                    <button type="button" onClick={logout}>
-                        Logout
-                    </button>
-                </nav>
+                        <Link className="brand" to='/app/groups'>
+                              Group Dashboard
+                        </Link>
+                         <AIAssistant/>
+                    <nav className="header-nav">
+                            <button type="button" onClick={toggleTheme} aria-label="Toggle theme">
+                                     {theme === "light" ? "Dark" : "Light"}
+                            </button>
+                            <Link className="link" to='/app/profile'>
+                                    <SimpleAvatar
+                                        name={user?.name || "User"}
+                                        profilePicture={user?.profilePicture}
+                                        size={32}
+                            />
+                            </Link>
+                            <button type="button" onClick={logout}>
+                                Logout
+                            </button>
+                    </nav>
                 </div>
 
             </header>
@@ -55,7 +56,7 @@ const AppLayout = ()=>{
                  <Outlet/>
             </main>
            
-            <AIAssistant/>
+           
         </div>
     )
 }

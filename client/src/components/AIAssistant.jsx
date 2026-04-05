@@ -52,11 +52,12 @@ export const AIAssistant = ()=>{
         <>
             <button
                 onClick={()=>setOpen(true)}
+                className="ai"
                 style={{
-                position: "fixed",
+                // position: "fixed",
                 right: 18,
                 bottom: 65,
-                width: 54,
+                // width: 54,
                 height: 54,
                 borderRadius: "50%",
                 border: "1px solid var(--border)",
@@ -66,11 +67,12 @@ export const AIAssistant = ()=>{
                 zIndex: 9999,
                 fontSize: 20,
                 fontWeight: 700,
+                
                 }}
                 aria-label="Open AI assistant"
                 title="AI assistant"
              >
-                AI
+                Ask AI
             </button>
 
             {open &&(
@@ -138,10 +140,10 @@ export const AIAssistant = ()=>{
                             send
                         </button>
                     </form>
-             {loading && (
-                    <div style={{ marginTop: 10 }}>
-                    <LoadingSpinner label="Thinking..." />
-                    </div>
+                    {loading && (
+                            <div style={{ marginTop: 10 }}>
+                                <LoadingSpinner label="Thinking..." />
+                            </div>
                 )}  
              </Modal>
             )}
