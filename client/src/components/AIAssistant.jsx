@@ -72,7 +72,7 @@ export const AIAssistant = ()=>{
                 aria-label="Open AI assistant"
                 title="AI assistant"
              >
-                Ask AI
+                AI
             </button>
 
             {open &&(
