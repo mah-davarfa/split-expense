@@ -102,7 +102,7 @@ export const AIAssistant = ()=>{
                     {messages.length ===0 ?(
                         <p style={{ margin: 0, opacity: 0.7 }}
                         >
-                         ask AI Assistant
+                         How can I assist you?
                         </p>
                         ):(
                        messages.map((m,indx)=>(
@@ -129,7 +129,7 @@ export const AIAssistant = ()=>{
                         <input
                             value={text}
                             onChange={(e) => setText(e.target.value)}
-                            placeholder="Type a message…"
+                            placeholder="Ask your question …"
                             disabled={loading}
                             style={{ flex: 1, padding: "10px 12px" }}
                             maxLength={500}
